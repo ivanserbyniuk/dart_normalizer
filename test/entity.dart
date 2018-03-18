@@ -1,4 +1,5 @@
-import 'package:dart_normalizer/entity.dart';
+import 'package:dart_normalizer/normolizer.dart';
+import 'package:dart_normalizer/schema/entity.dart';
 import 'package:test/test.dart';
 
 import 'package:dart_normalizer/dart_normalizer.dart';
@@ -14,25 +15,27 @@ void main() {
 
 
   test('key getter should return key passed to constructor', () {
-    var user = new EntitySchema('users');
+    var user = new Entity('users');
     expect(user.key, 'users');
   });
 
   test("normalizes an entity", () {
-    var item = new EntitySchema("iten");
-    expect("", """
+    var item = new Entity("item");
+    var expectedJson = """
          {
         "entities": {
-        "item": {
-        "1": {
-        "id": 1,
-        },
-        },
-        },
+          "item": {
+          "1": {
+          "id": 1,
+          },
+          },
+          },
         "result": 1,
         }
         )
-        """);
+        """;
+    print(normalize({ "id": 1 }, item));
+    expect(normalize({ "id": 1 }, item), expectedJson);
   }
   );
 }
