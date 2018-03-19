@@ -1,49 +1,46 @@
 import 'package:dart_normalizer/schema/immutable_utils.dart';
 import 'package:dart_normalizer/schema/object.dart';
 import 'package:dart_normalizer/schema/entity.dart';
+import 'package:dart_normalizer/schema/array.dart';
 
 
 
 
 normalize(Map<String, dynamic>input, Entity schema) {
-  var entities = {};
+  Map entities = {};
   var addEntity = addEntities(entities);
-//  print("Lol");
 
   var result = visit(input, input, null, schema, addEntity);
-  print("Lol");
-
   return { "entities": entities, "result": result};
 }
 
 
 visit(Map value, Map parent, key,  schema, addEntity) {
-  if (!(value is Map)) {
-    return value;
-  }
- // var fun = value.runtimeType.toString() == "function";
-  //if ((!schema.normalize || !fun)) {
-    var method = /*schema is List ? ArrayUtils.normalize :*/ normalize2;
-    return method(schema, value, parent, key, visit, addEntity);
-  //}
 
- // return schema.normalize(value, parent, key, visit, addEntity);
+ // var fun = value.runtimeType.toString() == "function";
+  if (false) {
+    var method = schema is List ? normalize4 : normalize2;
+    return method(schema, value, parent, key, visit, addEntity);
+  }
+  var result = schema.normalize(value, parent, key, visit, addEntity);
+  return result;
 }
 
-addEntities(entities) =>
+addEntities(Map entities) =>
         (schema, processedEntity, value, parent, key) {
-  print("lol");
       var schemaKey = schema.key;
       var id = schema.getId(value, parent, key);
-      if (!entities.contain(schemaKey)) {
+      print("id$id");
+      if (!entities.containsKey(schemaKey)) {
         entities[schemaKey] = {};
       }
 
       var existingEntity = entities[schemaKey][id];
-      print(existingEntity);
       if (existingEntity!= null) {
+        print("merget");
         entities[schemaKey][id] = schema.merge(existingEntity, processedEntity);
       } else {
+        print("proccesedEntity $processedEntity");
         entities[schemaKey][id] = processedEntity;
       }
     };

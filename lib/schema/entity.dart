@@ -9,15 +9,17 @@ class Entity {
   String key;
   var idAttribute = 'id';
   var getDefaultGetId = (idAttribute) => (input) => input[idAttribute];
-  Map<String, dynamic> schema = {};
+  //Map<String, dynamic> schema = {};
   var _processStrategy = (input, parent, key) => [input];
 
-  getId(attr) => getDefaultGetId(idAttribute);
+  getId(input, parent, key) => input[idAttribute];//getDefaultGetId(idAttribute);
 
 
-  Entity(this.key, {definition, options});
 
-  denormalize(Map entity, unvisit) {
+  Entity(this.key, {definition, options}){
+  }
+
+/*  denormalize(Map entity, unvisit) {
     if (isImmutable(entity)) {
       return denormalizeImmutable(this.schema, entity, unvisit);
     }
@@ -29,21 +31,28 @@ class Entity {
       }
     });
     return entity;
-  }
+  }*/
 
   normalize(Map input, parent, key, visit, addEntity) {
     //   final processedEntity = this._processStrategy(input, parent, key);
     final processedEntity = input;
-    this.schema.keys.forEach((key) {
+/*    this.schema.keys.forEach((key) {
       if (processedEntity.containsKey(key)) {
-        var schema = this.schema[key];
+        var schema = key;
         processedEntity[key] = visit(
             processedEntity[key], processedEntity, key, schema, addEntity);
       }
-    });
+    });*/
+
+    if (this.key == key) {
+      var schema = key;
+      processedEntity[key] = visit(
+          processedEntity[key], processedEntity, key, schema, addEntity);
+    }
 
     addEntity(this, processedEntity, input, parent, key);
-    return getDefaultGetId(key);
+
+    return input[idAttribute];
   }
 
 }

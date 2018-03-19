@@ -5,7 +5,7 @@ var validateSchema = (definition) => definition[0];
 
 var  getValues = (input) => (input is List) ? input : input.values;
 
- normalize(schema, input, parent, key, visit, addEntity) {
+ normalize4(schema, input, parent, key, visit, addEntity) {
   // validateSchema(schema);
 var values = getValues(input);
 

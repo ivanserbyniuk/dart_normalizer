@@ -34,7 +34,7 @@ void main() {
         }
         )
         """;
-    print(normalize({ "id": 1 }, item));
+    //print(normalize({ "id": 1 }, item));
     expect(normalize({ "id": 1 }, item), expectedJson);
   }
   );
