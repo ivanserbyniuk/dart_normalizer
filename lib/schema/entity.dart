@@ -16,7 +16,10 @@ class Entity {
 
 
 
-  Entity(this.key, {definition, options}){
+  Entity(this.key, {String idAttribute ,definition, options}){
+    if(idAttribute != null) {
+      this.idAttribute = idAttribute;
+    }
   }
 
 /*  denormalize(Map entity, unvisit) {
@@ -48,6 +51,7 @@ class Entity {
       var schema = key;
       processedEntity[key] = visit(
           processedEntity[key], processedEntity, key, schema, addEntity);
+      print("prossesed entity $processedEntity");
     }
 
     addEntity(this, processedEntity, input, parent, key);

@@ -5,7 +5,7 @@ import 'package:dart_normalizer/schema/immutable_utils.dart';
   dynamic schema;
 
   PolymorphicSchema(definition, dynamic schemaAttribute) {
-    if (schemaAttribute) {
+    if (schemaAttribute !=null) {
       this._schemaAttribute = schemaAttribute is String  ? (input) => input[schemaAttribute] : schemaAttribute;
     }
     this.define(definition);
@@ -33,7 +33,7 @@ import 'package:dart_normalizer/schema/immutable_utils.dart';
 
   normalizeValue(value, parent, key, visit, addEntity) {
     final schema = inferSchema(value, parent, key);
-    if (!schema) {
+    if (schema == null) {
       return value;
     }
     final normalizedValue = visit(value, parent, key, schema, addEntity);
@@ -44,7 +44,7 @@ import 'package:dart_normalizer/schema/immutable_utils.dart';
 
   denormalizeValue(value, unvisit) {
     final schemaKey = isImmutable(value) ? value.get('schema') : value.schema;
-    if (!this.isSingleSchema && !schemaKey) {
+    if (!this.isSingleSchema && schemaKey!=null) {
       return value;
     }
     final  id = isImmutable(value) ? value.get('id') : value.id;

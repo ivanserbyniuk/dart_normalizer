@@ -6,12 +6,17 @@ var validateSchema = (definition) => definition[0];
 var  getValues = (input) => (input is List) ? input : input.values;
 
  normalize4(schema, input, parent, key, visit, addEntity) {
+   print("normalize4 $input");
   // validateSchema(schema);
 var values = getValues(input);
 
+if(!(values is List)){
+return visit(values, parent, key, schema, addEntity);
+}
+
 // Special case: Arrays pass *their* parent on to their children, since there
 // is not any special information that can be gathered from themselves directly
-return values.map((value) => visit(value, parent, key, schema, addEntity));
+return values.map((value) => visit(value, parent, key, schema, addEntity)).toList();
 }
 
 denormalize (schema, input, unvisit)  {
@@ -28,7 +33,7 @@ class ArraySchema extends PolymorphicSchema {
 
     return values
         .map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity))
-        .where((value) => value !=null);
+        .where((value) => value !=null).toList();
   }
 
   denormalize(input, unvisit) {
