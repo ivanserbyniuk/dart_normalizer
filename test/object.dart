@@ -25,7 +25,6 @@ void main() {
     """;
 
     var userSchema = new Entity('user');
-    var idSchema = new Entity('id');
     var schema = new ObjectSchema({
       "user": userSchema,
     });

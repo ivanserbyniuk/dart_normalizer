@@ -10,12 +10,12 @@ import 'package:dart_normalizer/dart_normalizer.dart';
 void main() {
 
   test('key getter should return key passed to constructor', () {
-    var user = new Entity('users');
+    var user = new EntitySchema('users');
     expect(user.key, 'users');
   });
 
   test("normalizes an entity", () {
-    var userSchema = new Entity("user");
+    var userSchema = new EntitySchema("user");
     var expectedJson = """
      {
     	"entities": {
@@ -37,14 +37,14 @@ void main() {
     var test = [ { "id": 1 }, { "id": 2 } ];
     Map mapTest = fromJson(expectedJson);
     print(mapTest);
-    expect(normalize(test, userSchema), fromJson(expectedJson));
+    expect(normalize(test, [userSchema]), fromJson(expectedJson));
 
   });
 
 
 
   test('normalizes Objects using their values', () {
-      var userSchema = new Entity('user');
+      var userSchema = new EntitySchema('user');
       var expectedJson = """
       {
   "entities": {
@@ -67,7 +67,7 @@ void main() {
         "foo": { "id": 1}, "bar": { "id": 2}
       };
 
-  expect(normalize(test, userSchema), fromJson(expectedJson));
+  expect(normalize(test, [userSchema]), fromJson(expectedJson));
 });
 }
 

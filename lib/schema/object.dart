@@ -16,6 +16,24 @@ normalize2(schema, input, parent, key, visit, addEntity) {
   return object;
 }
 
+  normalize22(schema, input, parent, key, visit, addEntity) {
+  var object = input;
+  print("input $input");
+  print("schema $schema");
+  (schema.schema.keys).forEach((key) {
+  var localSchema = schema.schema[key];
+  var value = visit(input[key], input, key, localSchema, addEntity);
+  print(value);
+  if (value == null) {
+    object.remove(key);
+  } else {
+  object[key] = value;
+  }
+  });
+  return object;
+}
+
+
 class ObjectSchema {
   var schema;
 

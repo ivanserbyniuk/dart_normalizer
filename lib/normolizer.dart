@@ -1,6 +1,7 @@
+import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/immutable_utils.dart';
 import 'package:dart_normalizer/schema/object.dart';
-import 'package:dart_normalizer/schema/array.dart';
+import 'package:dart_normalizer/schema/array.dart' as ArrayUtils;
 
 
 
@@ -14,51 +15,40 @@ normalize(input, schema) {
 
 
 visit( value,  parent, key,  schema, addEntity) {
-/*  if(!(value is Map) || !(value is List) || value != null) {
+if( value == null || value is String) {
     return value;
-  }*/
+  }
  // var fun = value.runtimeType.toString() == "function"
-  if (value is List) {
-    var method = normalize4;//value is List ? normalize4 : normalize2;
+  if (schema is List ) {
+    var method = ArrayUtils.normalize;
     return method(schema, value, parent, key, visit, addEntity);
   }
-/*  if( value is Map && schema.schema is Map ){
 
-    var method = normalize2;//value is List ? normalize4 : normalize2;
+/* if( schema is ObjectSchema  ){
+
+    var method = normalize22;//value is List ? normalize4 : normalize2;
     return method(schema, value, parent, key, visit, addEntity);
   }*/
   var result = schema.normalize(value, parent, key, visit, addEntity);
   return result;
 }
 
-addEntities( entities) =>
-        (schema, processedEntity, value, parent, key) {
+addEntities(entities) =>
+        (EntitySchema schema, processedEntity, value, parent, key) {
       var schemaKey = schema.key;
+      print("schemaKey$schemaKey");
       var id = schema.getId(value, parent, key).toString();
-      print("id$id");
       if (!entities.containsKey(schemaKey)) {
         entities[schemaKey] = {};
       }
 
       var existingEntity = entities[schemaKey][id];
-      if (existingEntity!= null) {
-        print("merget");
+      if (existingEntity) {
         entities[schemaKey][id] = schema.merge(existingEntity, processedEntity);
       } else {
-        print("proccesedEntity $processedEntity");
         entities[schemaKey][id] = processedEntity;
       }
-    };
-
-/*
-export const schema = {
-  Array: ArraySchema,
-  Entity: EntitySchema,
-  Object: ObjectSchema,
-  Union: UnionSchema,
-  Values: ValuesSchema
-};
-*/
+        };
 
 
 unvisitEntity(id, schema, unvisit, getEntity, cache) {
@@ -126,4 +116,9 @@ getEntities(entities) {
 if (input !=null) {
 return getUnvisit(entities)(input, schema);
 }*/
+
+
+
+
+
 

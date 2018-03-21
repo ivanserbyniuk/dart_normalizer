@@ -10,12 +10,12 @@ import 'package:dart_normalizer/dart_normalizer.dart';
 void main() {
 
   test('key getter should return key passed to constructor', () {
-    var user = new Entity('users');
+    var user = new EntitySchema('users');
     expect(user.key, 'users');
   });
 
   test("normalizes an entity", () {
-    var item = new Entity("item");
+    var item = new EntitySchema("item");
     var expectedJson = """
     {
   "entities": {
@@ -44,8 +44,8 @@ void main() {
   },
 }
         """;
-    var cat = new Entity('cats');
-    var dog = new Entity('dogs');
+    var cat = new EntitySchema('cats');
+    var dog = new EntitySchema('dogs');
     var valuesSchema = new Values({
       "dogs": dog,
       "cats": cat
