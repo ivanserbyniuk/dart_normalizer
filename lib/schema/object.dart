@@ -1,37 +1,23 @@
 import 'package:dart_normalizer/schema/entity.dart';
 
 
-normalize2(schema, input, parent, key, visit, addEntity) {
-  Map object = input;
-  print("input");
-  (schema.schema.keys).forEach((key) {
-    var localSchema = schema.schema[key];
+normalize1(schema, input, parent, key, visit, addEntity) {
+  Map<dynamic, dynamic> object ={};
+  object.addAll(input);
+  (schema.keys).forEach((key) {
+    var localSchema = schema[key];
     var value = visit(input[key], input, key, localSchema, addEntity);
     if (value == null) {
       object.remove(key);
     } else {
+      object.remove(key);
       object[key] = value;
     }
   });
   return object;
 }
 
-  normalize22(schema, input, parent, key, visit, addEntity) {
-  var object = input;
-  print("input $input");
-  print("schema $schema");
-  (schema.schema.keys).forEach((key) {
-  var localSchema = schema.schema[key];
-  var value = visit(input[key], input, key, localSchema, addEntity);
-  print(value);
-  if (value == null) {
-    object.remove(key);
-  } else {
-  object[key] = value;
-  }
-  });
-  return object;
-}
+
 
 
 class ObjectSchema {
@@ -41,12 +27,22 @@ class ObjectSchema {
     this.define(definition);
   }
 
-  define(definition) {
-    this.schema = definition;
+  define(Map definition) {
+    print("object schema ${definition.keys}");
+    if(definition.length == 1 ) {
+      var key = definition.keys.first;
+      this.schema = {"entirSchema":{}, key :definition[key] };
+    } else {
+      this.schema=(definition.keys).reduce((entitySchema, key) {
+        var schema = definition[key];
+        return { "entirySchema": entitySchema, [key]: schema};
+      }); }
+
   }
 
-  normalizeSelf(input, parent, key, visit, addEntity) {
-    return normalize2(schema, input, parent, key, visit, addEntity);
+
+  normalize( input, parent, key, visit, addEntity) {
+    return normalize1(this.schema, input, parent, key, visit, addEntity);
   }
 
 

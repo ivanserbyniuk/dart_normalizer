@@ -16,7 +16,7 @@ return values.map((value) => visit(value, parent, key, schema, addEntity)).toLis
 
 
 class ArraySchema extends PolymorphicSchema {
-  ArraySchema(definition, schemaAttribute) : super(definition, schemaAttribute);
+  ArraySchema(definition, {schemaAttribute}) : super(definition, schemaAttribute);
   normalize(input, parent, key, visit, addEntity) {
     final values = getValues(input);
 

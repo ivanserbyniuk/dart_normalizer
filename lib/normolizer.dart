@@ -1,7 +1,8 @@
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/immutable_utils.dart';
-import 'package:dart_normalizer/schema/object.dart';
+import 'package:dart_normalizer/schema/object.dart' as ObjectUtils;
 import 'package:dart_normalizer/schema/array.dart' as ArrayUtils;
+import 'package:dart_normalizer/schema/object.dart';
 
 
 
@@ -19,16 +20,10 @@ if( value == null || value is String) {
     return value;
   }
  // var fun = value.runtimeType.toString() == "function"
-  if (schema is List ) {
-    var method = ArrayUtils.normalize;
+  if (schema is List || schema is Map ) {
+    var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
     return method(schema, value, parent, key, visit, addEntity);
   }
-
-/* if( schema is ObjectSchema  ){
-
-    var method = normalize22;//value is List ? normalize4 : normalize2;
-    return method(schema, value, parent, key, visit, addEntity);
-  }*/
   var result = schema.normalize(value, parent, key, visit, addEntity);
   return result;
 }
