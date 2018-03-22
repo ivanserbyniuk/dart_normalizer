@@ -5,7 +5,7 @@ import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/value.dart';
 import 'package:test/test.dart';
 
-import 'package:dart_normalizer/dart_normalizer.dart';
+import 'entity.dart';
 
 void main() {
 
@@ -15,48 +15,50 @@ void main() {
   });
 
   test("normalizes an entity", () {
-    var item = new EntitySchema("item");
     var expectedJson = """
     {
   "entities": {
     "cats": {
       "1": {
         "id": 1,
-        "type": "cats",
-      },
+        "type": "cats"
+      }
     },
     "dogs": {
       "1": {
         "id": 1,
-        "type": "dogs",
-      },
-    },
+        "type": "dogs"
+      }
+    }
   },
   "result": {
     "fido": {
       "id": 1,
-      "schema": "dogs",
+      "schema": "dogs"
     },
     "fluffy": {
       "id": 1,
-      "schema": "cats",
-    },
-  },
+      "schema": "cats"
+    }
+  }
 }
         """;
+    var inferSchemaFn = ((input, parent, key) => input["type"]);
+
     var cat = new EntitySchema('cats');
     var dog = new EntitySchema('dogs');
     var valuesSchema = new Values({
       "dogs": dog,
       "cats": cat
-    }, (entity, key) => entity.type);
+    },schemaAttribute: inferSchemaFn);
 
 
     Map<String, dynamic> test = {
-      "fido": { "id": 1, "type": 'dogs' },
-      "fluffy": { "id": 1, "type": 'cats' }
+      "fluffy": { "id": 1, "type": 'cats' },
+      "fido": { "id": 1, "type": 'dogs' }
+
     };
-    expect(normalize(test, valuesSchema), expectedJson);
+    expect(normalize(test, valuesSchema), fromJson(expectedJson));
   });
 }
 

@@ -31,11 +31,11 @@ class ObjectSchema {
     print("object schema ${definition.keys}");
     if(definition.length == 1 ) {
       var key = definition.keys.first;
-      this.schema = {"entirSchema":{}, key :definition[key] };
+      this.schema = {"entirySchema":{}, key :definition[key] };
     } else {
       this.schema=(definition.keys).reduce((entitySchema, key) {
         var schema = definition[key];
-        return { "entirySchema": entitySchema, [key]: schema};
+        return { "entirySchema": entitySchema, key: schema};
       }); }
 
   }

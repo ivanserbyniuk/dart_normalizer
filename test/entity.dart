@@ -4,7 +4,6 @@ import 'package:dart_normalizer/normolizer.dart';
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:test/test.dart';
 
-import 'package:dart_normalizer/dart_normalizer.dart';
 
 void main() {
 
@@ -50,7 +49,6 @@ void main() {
     """;
     var item = new EntitySchema("users",idAttribute: "id_str");
     var json = normalize({ "id_str": '134351', "name": 'Kathy' },item);
-    print(json);
     expect(json, fromJson(expectedJson));
       });
 

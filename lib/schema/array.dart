@@ -17,11 +17,11 @@ return values.map((value) => visit(value, parent, key, schema, addEntity)).toLis
 
 class ArraySchema extends PolymorphicSchema {
   ArraySchema(definition, {schemaAttribute}) : super(definition, schemaAttribute);
+
   normalize(input, parent, key, visit, addEntity) {
     final values = getValues(input);
-
     return values
-        .map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity))
+        .map((value) => this.normalizeValue(value, parent, key, visit, addEntity))
         .where((value) => value !=null).toList();
   }
 }

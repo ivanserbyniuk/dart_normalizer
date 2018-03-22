@@ -25,13 +25,13 @@ if( value == null || value is String) {
     return method(schema, value, parent, key, visit, addEntity);
   }
   var result = schema.normalize(value, parent, key, visit, addEntity);
+
   return result;
 }
 
 addEntities(entities) =>
         (EntitySchema schema, processedEntity, value, parent, key) {
       var schemaKey = schema.key;
-      print("schemaKey$schemaKey");
       var id = schema.getId(value, parent, key).toString();
       if (!entities.containsKey(schemaKey)) {
         entities[schemaKey] = {};

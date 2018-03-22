@@ -48,7 +48,6 @@ class EntitySchema {
 
 
   var getDefaultGetId = (idAttribute) {
-    print("idAttribute $idAttribute");
    return (input) => input[idAttribute];};
 
   EntitySchema(this.key, {definition, options, idAttribute, idAttributeFun}) {
@@ -84,11 +83,11 @@ class EntitySchema {
     if (definition != null) {
       this.schema = (definition.keys).reduce((entitySchema, key) {
         final schema = definition[key];
-        return { "entitySchema": entitySchema, [key]: schema};
+        return { "entitySchema": entitySchema, "key": schema};
       });
     }
     if (schema == null) {
-      this.schema = {key: {}};
+      this.schema = {};
     }
   }
 
