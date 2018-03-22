@@ -17,8 +17,8 @@ class  Values extends PolymorphicSchema {
         var value = object[key];
         print("value valuees $value");
         return (value !=  null) ? {
-        output:this.normalizeValue(object[output], input, key, visit, addEntity),
-        key: this.normalizeValue(value, input, key, visit, addEntity)
+          output:this.normalizeValue(object[output], input, key, visit, addEntity),
+          key: this.normalizeValue(value, input, key, visit, addEntity)
         }
         : output;
     });

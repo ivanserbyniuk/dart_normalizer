@@ -7,7 +7,7 @@ class PolymorphicSchema {
   PolymorphicSchema(definition, dynamic schemaAttribute) {
     if (schemaAttribute != null) {
       this._schemaAttribute = schemaAttribute is String
-          ? (input) => input[schemaAttribute]
+          ? (input,p1,p2) => input[schemaAttribute]
           : schemaAttribute;
     }
 
@@ -29,6 +29,7 @@ class PolymorphicSchema {
   inferSchema(input, parent, key) {
 
     var attr = getSchemaAttribute(input, parent, key);
+    print("attr $attr");
     return this.schema[attr];
   }
 

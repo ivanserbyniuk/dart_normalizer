@@ -62,8 +62,4 @@ void main() {
   });
 }
 
-toJson(Map value) {
-  JsonEncoder encoder = new JsonEncoder.withIndent('');
-  String prettyprint = encoder.convert(value);
-  return prettyprint;
-}
+
