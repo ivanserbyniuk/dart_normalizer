@@ -19,7 +19,6 @@ visit( value,  parent, key,  schema, addEntity) {
 if( value == null || value is String) {
     return value;
   }
- // var fun = value.runtimeType.toString() == "function"
   if (schema is List || schema is Map ) {
     var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
     return method(schema, value, parent, key, visit, addEntity);
@@ -69,28 +68,7 @@ unvisitEntity(id, schema, unvisit, getEntity, cache) {
   return cache[schema.key][id];
 }
 
-/*getUnvisit(entities){
-var cache = {};
-var getEntity = getEntities(entities);
-var unvisit =  unvisit(input, schema) {
-  if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
-   const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
-   return method(schema, input, unvisit);
-   }
 
-   if (input === undefined || input === null) {
-   return input;
-   }
-
-   if (schema instanceof EntitySchema) {
-   return unvisitEntity(input, schema, unvisit, getEntity, cache);
-   }
-
-   return schema.denormalize(input, unvisit);
- }
-return  unvisit;
-};
-*/
 getEntities(entities) {
   var isIm = isImmutable(entities);
 
@@ -107,13 +85,32 @@ getEntities(entities) {
   };
 }
 
-/* denormalize (input, schema, entities)  {
+
+getUnvisit(entities)  {
+  var cache = {};
+  var getEntity = getEntities(entities);
+  unvisit (input, schema) {
+
+    if (schema is List || schema is Map ) {
+      //var method = (schema is List) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
+      return null;//method(schema, input, unvisit);
+    }
+
+    if (input == null) {
+      return input;
+    }
+
+    if (schema is EntitySchema) {
+      return unvisitEntity(input, schema, unvisit, getEntity, cache);
+    }
+
+    return schema.denormalize(input, unvisit);
+  }
+
+  return (input, schema) => unvisit(input, schema);
+}
+
+ denormalize (input, schema, entities)  {
 if (input !=null) {
 return getUnvisit(entities)(input, schema);
-}*/
-
-
-
-
-
-
+}}

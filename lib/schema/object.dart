@@ -10,7 +10,6 @@ normalize1(schema, input, parent, key, visit, addEntity) {
     if (value == null) {
       object.remove(key);
     } else {
-      object.remove(key);
       object[key] = value;
     }
   });

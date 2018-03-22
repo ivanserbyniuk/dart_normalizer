@@ -47,13 +47,16 @@ class PolymorphicSchema {
     };
   }
 
+
   denormalizeValue(value, unvisit) {
-    final schemaKey = isImmutable(value) ? value.get('schema') : value.schema;
-    if (!this.isSingleSchema() && schemaKey != null) {
+    var schemaKey =  value["schema"];;
+    if (!isSingleSchema() && schemaKey==null) {
       return value;
     }
-    final id = isImmutable(value) ? value.get('id') : value.id;
-    final schema = this.isSingleSchema() ? this.schema : this.schema[schemaKey];
-    return unvisit(id || value, schema);
+    var id =  value["id"];
+    print(value);
+    var schema = isSingleSchema() ? this.schema : this.schema[schemaKey];
+    var key = id == null ? value : id;
+    return unvisit(key, schema);
   }
 }

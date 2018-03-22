@@ -9,12 +9,9 @@ import 'entity.dart';
 
 void main() {
 
-  test('key getter should return key passed to constructor', () {
-    var user = new EntitySchema('users');
-    expect(user.key, 'users');
-  });
 
-  test("normalizes an entity", () {
+
+  test("normalizes the values of an object with the given schema", () {
     var expectedJson = """
     {
   "entities": {
@@ -60,6 +57,21 @@ void main() {
     };
     expect(normalize(test, valuesSchema), fromJson(expectedJson));
   });
+
+
+  test('can use a function to determine the schema when normalizing', (){
+var  dog = new EntitySchema('dogs');
+  const valuesSchema = new schema.Values({
+    dogs: dog,
+    cats: cat
+  }, (entity, key) => `${entity.type}s`);
+
+  expect(normalize({
+    fido: { id: 1, type: 'dog' },
+    fluffy: { id: 1, type: 'cat' },
+    jim: { id: 2, type: 'lizard' }
+  }, valuesSchema)).toMatchSnapshot();
+});
 }
 
 
