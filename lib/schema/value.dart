@@ -1,3 +1,4 @@
+import 'package:dart_normalizer/Pair.dart';
 import 'package:dart_normalizer/schema/polymorfic.dart';
 
 class  Values extends PolymorphicSchema {
@@ -6,25 +7,22 @@ class  Values extends PolymorphicSchema {
   normalize(Map input, parent, String key, visit, addEntity) {
     print("values1 $input");
     Map<dynamic, dynamic> object ={};
-   /* if(input.length == 1) {
-      var nomalized = normalizeValue(input.values.first, parent, key, visit, addEntity);
-      print("normalized$nomalized");
-      return {"output":{ "output": {}, "id": nomalized },
-        "type": nomalized };
-    }*/
     object.addAll(input);
-    var res =  object.keys.reduce((output, key) {
-        var value = object[key];
-        print("value valuees $value");
-        return (value !=  null) ? {
-          output:this.normalizeValue(object[output], input, key, visit, addEntity),
-          key: this.normalizeValue(value, input, key, visit, addEntity)
-        }
-        : output;
+    object.addAll(object.map((key, value)=> MapEntry(key, normalizeValue(value, input, key, visit, addEntity)) ));
+    return object;
+
+  }
+
+  denormalize( input, unvisit) {
+    print("denorm$input");
+    return input.map((key, value) => MapEntry(key, denormalizeValue(value, unvisit)));
+    return (input.keys).reduce((output, key)  {
+        var entityOrId = input[key];
+        return {
+        output:denormalizeValue(entityOrId, unvisit),
+        key: denormalizeValue(entityOrId, unvisit)
+        };
     });
-    print("res$res");
-   /* { output: { output: {}, id: 'normalizeValue' },
-    type: 'normalizeValue' }*/
-    return res;
-  }  }
+  }
+}
 

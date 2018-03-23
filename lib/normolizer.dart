@@ -23,6 +23,7 @@ if( value == null || value is String) {
     var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
     return method(schema, value, parent, key, visit, addEntity);
   }
+
   var result = schema.normalize(value, parent, key, visit, addEntity);
 
   return result;
@@ -103,7 +104,7 @@ getUnvisit(entities)  {
     if (schema is EntitySchema) {
       return unvisitEntity(input, schema, unvisit, getEntity, cache);
     }
-
+    print("denotm-1 $schema");
     return schema.denormalize(input, unvisit);
   }
 

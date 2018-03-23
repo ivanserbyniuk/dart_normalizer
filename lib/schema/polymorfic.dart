@@ -23,13 +23,18 @@ class PolymorphicSchema {
   }
 
   getSchemaAttribute(input, parent, key) {
+    if(input == null) {
+      return null;
+    }
     return  this._schemaAttribute(input, parent, key);
   }
 
   inferSchema(input, parent, key) {
-
+ print("input $input  $key");
+ if (isSingleSchema()) {
+   return schema;
+ }
     var attr = getSchemaAttribute(input, parent, key);
-    print("attr $attr");
     return this.schema[attr];
   }
 
@@ -49,7 +54,7 @@ class PolymorphicSchema {
 
 
   denormalizeValue(value, unvisit) {
-    var schemaKey =  value["schema"];;
+    var schemaKey =  value["schema"];
     if (!isSingleSchema() && schemaKey==null) {
       return value;
     }

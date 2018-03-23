@@ -93,7 +93,7 @@ void main() {
   });
 
 
-  test('normalizes multiple entities', (){
+  test('normalizes multiple entities', (){//todo check order
       var inferSchemaFn = ((input, parent, key) => input["type"]);
   var catSchema = new EntitySchema('cats');
   var peopleSchema = new EntitySchema('person');
