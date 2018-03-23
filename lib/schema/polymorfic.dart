@@ -4,7 +4,7 @@ class PolymorphicSchema {
   dynamic _schemaAttribute;
   dynamic schema;
 
-  PolymorphicSchema(definition, dynamic schemaAttribute) {
+  PolymorphicSchema(definition, schemaAttribute) {
     if (schemaAttribute != null) {
       this._schemaAttribute = schemaAttribute is String
           ? (input,p1,p2) => input[schemaAttribute]

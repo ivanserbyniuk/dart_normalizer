@@ -132,6 +132,7 @@ void main() {
   };
 
   test('denormalizes an object using string schemaAttribute', () {
+    //too check order
     var expectedJson1 = """ {
     "id": 1,
     "type": "users",

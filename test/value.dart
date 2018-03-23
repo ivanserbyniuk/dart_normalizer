@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dart_normalizer/normolizer.dart';
+import 'package:dart_normalizer/normolizer.dart' as N;
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/value.dart';
 import 'package:test/test.dart';
@@ -55,22 +55,90 @@ void main() {
       "fido": { "id": 1, "type": 'dogs' }
 
     };
-    expect(normalize(test, valuesSchema), fromJson(expectedJson));
+    expect(N.normalize(test, valuesSchema), fromJson(expectedJson));
   });
 
 
   test('can use a function to determine the schema when normalizing', (){
-var  dog = new EntitySchema('dogs');
-  const valuesSchema = new schema.Values({
-    dogs: dog,
-    cats: cat
-  }, (entity, key) => `${entity.type}s`);
+    //Todo check ValueSchema normalization with multiply entites
+    var exctedJson = """
+    {
+  "entities": {
+    "cats": {
+      "1": {
+        "id": 1,
+        "type": "cat"
+      }
+    },
+    "dogs": {
+      "1": {
+        "id": 1,
+        "type": "dog"
+      }
+    }
+  },
+  "result": {
+    "fido": {
+      "id": 1,
+      "schema": "dogs"
+    },
+    "fluffy": {
+      "id": 1,
+      "schema": "cats"
+    },
+    "jim": {
+      "id": 2,
+      "type": "lizard"
+    }
+  }
+}""";
+  var  dog = new EntitySchema('dogs');
+  var  cat = new EntitySchema('cats');
+  var valuesSchema = new Values({
+    "dogs": dog,
+    "cats": cat
+  }, schemaAttribute: (entity, parrent, key) => '${entity["type"]}s');
 
-  expect(normalize({
-    fido: { id: 1, type: 'dog' },
-    fluffy: { id: 1, type: 'cat' },
-    jim: { id: 2, type: 'lizard' }
-  }, valuesSchema)).toMatchSnapshot();
+  var test = {
+    "fido": { "id": 1, "type": 'dog' },
+    "fluffy": { "id": 1, "type": 'cat' },
+    "jim": { "id": 2, "type": 'lizard' }
+  };
+  expect(N.normalize(test, valuesSchema),fromJson(exctedJson));
+});
+
+
+  test('filters out null and undefined values', () {
+    var expectedJson = """
+    {
+  "entities": {
+    "cats": {
+      "1": {
+        "id": 1,
+        "type": "cats"
+      }
+    }
+  },
+  "result": {
+    "fluffy": {
+      "id": 1,
+      "schema": "cats"
+    }
+  }
+}""";
+      var cat = new EntitySchema('cats');
+  var dog = new EntitySchema('dogs');
+  var valuesSchema = new Values({
+    "dogs": dog,
+    "cats": cat
+  }, schemaAttribute :(entity, parrent, key) => entity["type"]);
+ var test = {
+   "fido": null,
+   "milo": null,
+   "fluffy": { "id": 1, "type": 'cats' }
+ } ;
+  expect(N.normalize(test, valuesSchema), fromJson(expectedJson));
+
 });
 }
 
