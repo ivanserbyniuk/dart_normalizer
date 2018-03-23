@@ -30,7 +30,6 @@ class PolymorphicSchema {
   }
 
   inferSchema(input, parent, key) {
- print("input $input  $key");
  if (isSingleSchema()) {
    return schema;
  }

@@ -38,7 +38,8 @@ addEntities(entities) =>
       }
 
       var existingEntity = entities[schemaKey][id];
-      if (existingEntity) {
+      print("existingEntity $existingEntity");
+      if (existingEntity != null) {
         entities[schemaKey][id] = schema.merge(existingEntity, processedEntity);
       } else {
         entities[schemaKey][id] = processedEntity;

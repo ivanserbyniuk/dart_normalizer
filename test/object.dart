@@ -9,8 +9,7 @@ import 'array.dart';
 
 
 void main() {
-  test("normalizes an object" ,(){
-    var expectedJson = """
+  var expectedJson = """
     {
   "entities": {
     "user": {
@@ -25,6 +24,8 @@ void main() {
 }
     """;
 
+  test("normalizes an object" ,(){
+
     var userSchema = new EntitySchema('user');
     var schema = new ObjectSchema({
       "user": userSchema,
@@ -32,4 +33,30 @@ void main() {
     var test = { "user": { "id": 1 } };
     expect(N.normalize(test, schema), fromJson(expectedJson));
   });
+
+
+  test("normalizes plain objects as shorthand for ObjectSchema ", (){
+    var userSchema = new EntitySchema('user');
+    expect(N.normalize({ "user": { "id": 1 } }, { "user": userSchema }),fromJson(expectedJson));
+  });
+
+
+  test('filters out undefined and null values', () {
+    var expectedJson = """{
+      "entities": {
+    "user": {
+      "1": {
+        "id": "1"
+      },
+      "undefined": {}
+    }
+  },
+  "result": {
+    "bar": "1"
+  }
+}""";
+      var userSchema = new EntitySchema('user');
+  var users = { "foo": userSchema, "bar": userSchema, "baz": userSchema };
+  expect(N.normalize({ "foo": {}, "bar": { "id": '1' } }, users), fromJson(expectedJson));
+});
 }

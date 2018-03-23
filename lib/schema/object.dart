@@ -6,13 +6,14 @@ normalize1(schema, input, parent, key, visit, addEntity) {
   object.addAll(input);
   (schema.keys).forEach((key) {
     var localSchema = schema[key];
-    var value = visit(input[key], input, key, localSchema, addEntity);
+      var value = visit(input[key], input, key, localSchema, addEntity);
     if (value == null) {
       object.remove(key);
     } else {
       object[key] = value;
     }
   });
+  print("print object $object");
   return object;
 }
 
@@ -20,22 +21,23 @@ normalize1(schema, input, parent, key, visit, addEntity) {
 
 
 class ObjectSchema {
-  var schema;
+  Map schema;
 
   ObjectSchema(definition) {
     this.define(definition);
   }
 
   define(Map definition) {
-    print("object schema ${definition.keys}");
-    if(definition.length == 1 ) {
+    this.schema = definition.map((key, value)=> MapEntry(key, value));
+    
+/*    if(definition.length == 1 ) {
       var key = definition.keys.first;
-      this.schema = {"entirySchema":{}, key :definition[key] };
+      this.schema = { key :definition[key] };
     } else {
       this.schema=(definition.keys).reduce((entitySchema, key) {
         var schema = definition[key];
         return { "entirySchema": entitySchema, key: schema};
-      }); }
+      }); }*/
 
   }
 

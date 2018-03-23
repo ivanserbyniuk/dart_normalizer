@@ -5,10 +5,14 @@ class  Values extends PolymorphicSchema {
   Values(definition, {schemaAttribute}) : super(definition, schemaAttribute);
 
   normalize(Map input, parent, String key, visit, addEntity) {
-    print("values1 $input");
     Map<dynamic, dynamic> object ={};
-    object.addAll(input);
+    input.forEach((key, value){
+      if(value != null) {
+        object[key] = value;
+      }
+    });
     object.addAll(object.map((key, value)=> MapEntry(key, normalizeValue(value, input, key, visit, addEntity)) ));
+
     return object;
 
   }
