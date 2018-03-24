@@ -92,7 +92,6 @@ getUnvisit(entities)  {
   var cache = {};
   var getEntity = getEntities(entities);
   unvisit (input, schema) {
-
     if (schema is List || schema is Map ) {
       var method = (schema is List) ? ArrayUtils.denormalize : ObjectUtils.denormalize1;
       return method(schema, input, unvisit);
@@ -115,4 +114,6 @@ getUnvisit(entities)  {
  denormalize (input, schema, entities)  {
 if (input !=null) {
 return getUnvisit(entities)(input, schema);
-}}
+}
+else {return {};}
+}

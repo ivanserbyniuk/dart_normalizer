@@ -13,15 +13,12 @@ class EntitySchema {
   var getDefaultGetId = (idAttribute) =>
       (input, paremt, key) => input[idAttribute];
 
-  EntitySchema(this.key, {definition, options, idAttribute}) {
+  EntitySchema(this.key, {definition, options, idAttribute, processStrategy, mergeStrategy}) {
     if (key == null) {
       throw new Exception();
     }
-
-    var mergeStrategy = (entityA, entityB) {
-      return {entityA: [entityA], entityA: [entityB]};
-    };
-    var processStrategy = (input) => ([input]);
+    print((input,parent, key) => input);
+    _processStrategy= processStrategy!= null ? processStrategy : (input,parent, key) => input;
     if (idAttribute == null) {
       // this.idAttribute = "id";
       this._getId = getDefaultGetId("id");
@@ -31,11 +28,9 @@ class EntitySchema {
           ? getDefaultGetId(idAttribute)
           : idAttribute;
     }
-    this._mergeStrategy = mergeStrategy;
-    this._processStrategy = processStrategy;
+    _mergeStrategy = (mergeStrategy != null) ? mergeStrategy :( entityA, entityB) =>entityA..addAll(entityB);
     this.define(definition);
   }
-
 
   define(Map definition) {
     if (definition != null) {
@@ -49,22 +44,20 @@ class EntitySchema {
     }
   }
 
-
   merge(entityA, entityB) {
+    print("mergeSt$entityA, $entityB $_mergeStrategy");
     return this._mergeStrategy(entityA, entityB);
   }
 
   normalize(input, parent, key, visit, addEntity) {
-    final processedEntity = input; // this._processStrategy(input, parent, key);
-    /*(this.schema.keys).forEach((key) {
+    final processedEntity = this._processStrategy(input, parent, key);
+    (this.schema.keys).forEach((key) {
       if (processedEntity.containsKey(key) && processedEntity[key] is Map) {
         final schema = this.schema[key];
-        processedEntity[key] = visit(
-            processedEntity[key], processedEntity, key, schema, addEntity);
+        processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
       }
-    });*/
-    addEntity(this, input, input, parent, key);
-    print("normalize");
+    });
+    addEntity(this, processedEntity, input, parent, key);
     return getId(input, parent, key);
   }
 

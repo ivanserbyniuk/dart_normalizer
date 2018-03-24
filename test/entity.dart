@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dart_normalizer/Pair.dart';
 import 'package:dart_normalizer/normolizer.dart';
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/object.dart';
@@ -111,11 +112,159 @@ void main() {
     expect(normalize(input, inputSchema), fromJson(expectedJson));
   });
 
-  ///merge strategy, proccess strategy
-  ///
-  ///
-  /// denormalizetion
-  test('denormalizes an entity', () {
+  //merge strategy, proccess strategy
+
+
+  // denormalizetion
+
+  test('can use a custom processing strategy', () {
+    var expectedJSON = """ {
+        "entities":  {
+    "tacos":  {
+      "1":  {
+        "id": 1,
+        "name": "foo",
+        "slug": "thing-1"
+      }
+     }
+    },
+    "result": 1
+  }""";
+    var processStrategy = (entity, parent, key) {
+      var map = {};
+      map.addAll(entity);
+      map.addAll({"slug": 'thing-${entity["id"]}'});
+      return map;
+    };
+
+    var mySchema = new EntitySchema('tacos', processStrategy: processStrategy);
+    var input = { "id": 1, "name": 'foo'};
+    expect(normalize(input, mySchema), fromJson(expectedJSON));
+  });
+
+  test('can use information from the parent in the process strategy', () {
+    var expectedJson = """ 
+    {
+  "entities": {
+    "children": {
+      "4": {
+        "content": "child",
+        "id": 4,
+        "parentId": 1,
+        "parentKey": "child"
+      }
+    },
+    "parents": {
+      "1": {
+        "child": 4,
+        "content": "parent",
+        "id": 1
+      }
+    }
+  },
+  "result": 1
+}""";
+    var processStrategy = (entity, parent, key) {
+      Map map = {};
+      map.addAll(entity);
+      map.addAll({"parentId": parent["id"], "parentKey": key});
+      return map;
+    };
+    var childEntity = new EntitySchema(
+        'children', processStrategy: processStrategy);
+    var parentEntity = new EntitySchema('parents', definition: {
+      "child": childEntity
+    });
+
+    var input = {
+      "id": 1, "content": 'parent', "child": { "id": 4, "content": 'child'}
+    };
+    expect(normalize(input, parentEntity), fromJson(expectedJson));
+  });
+
+
+//merge strategy
+  test('defaults to plain merging', () {
+    var expectedJson = """
+      {
+  "entities": {
+    "tacos": {
+      "1": {
+        "alias": "bar",
+        "id": 1,
+        "name": "bar"
+      }
+    }
+  },
+  "result": [
+    1,
+    1
+  ]
+}
+    """;
+    var mySchema = new EntitySchema('tacos');
+    var input = [
+      { "id": 1, "name": 'foo'},
+      { "id": 1, "name": 'bar', "alias": 'bar'}
+    ];
+    expect(normalize(input, [ mySchema]), fromJson(expectedJson));
+  });
+
+  test('can use a custom merging strategy', () {
+    var expectedJson = """ 
+    {
+  "entities": {
+    "tacos": {
+      "1": {
+        "alias": "bar",
+        "id": 1,
+        "name": "foo"
+      }
+    }
+  },
+  "result": [
+    1,
+    1
+  ]
+}""";
+    var mergeStrategy = ( entityA,  entityB) {
+      print("entityA$entityA entityB$entityB");
+      return entityB..addAll(entityA)..addAll({"name": entityA["name"]});
+    };
+    var mySchema = new EntitySchema('tacos', mergeStrategy: mergeStrategy);
+
+    var input = [
+      { "id": 1, "name": 'foo'},
+      { "id": 1, "name": 'bar', "alias": 'bar'}
+    ];
+    expect(normalize(input, [ mySchema]), fromJson(expectedJson));
+  });
+
+
+/*
+/*  test('is run before and passed to the schema normalization', () {
+    var expectedJson = """
+    {
+  "entities": {
+    "attachments": {
+      "456": {
+        "id": "456"
+      }
+    },
+    "entries": {
+      "123": {
+        "data": {
+          "attachment": "456"
+        },
+        "id": "123",
+        "type": "message"
+      }
+    }
+  },
+  "result": "123"
+}""";
+
+test('denormalizes an entity', () {
     var expectedJson = """ {
       "id": 1,
       "type": "foo"
@@ -157,7 +306,7 @@ void main() {
 
     expect(denormalize(1, menuSchema, entities), expectedJson1);
     expect(denormalize(2, menuSchema, entities), expectedJson2);
-  });
+  })*/  */;
 }
 
 
