@@ -132,7 +132,6 @@ void main() {
   };
 
   test('denormalizes an object using string schemaAttribute', () {
-    //todo check order
     var expectedJson1 = """ {
     "id": 1,
     "type": "users",
@@ -154,8 +153,8 @@ void main() {
     }, 'type');
 
     var testJson1 = { "id": 1, "schema": "users" };
-    expect(N.denormalize(testJson1, union, entities), expectedJson1);
+    expect(N.denormalize(testJson1, union, entities), fromJson(expectedJson1));
     var testJson2 = { 'id': 2, 'schema': 'groups' };
-    expect(N.denormalize(testJson2, union, entities), expectedJson2);
+    expect(N.denormalize(testJson2, union, entities), fromJson(expectedJson2));
   });
 }
