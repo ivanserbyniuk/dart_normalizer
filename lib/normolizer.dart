@@ -16,14 +16,14 @@ normalize(input, schema) {
 
 
 visit( value,  parent, key,  schema, addEntity) {
-if( value == null || value is String) {
-    return value;
+  print("visit value $value $key");
+if( value == null) {
+   throw new Exception("Unexpected input given to normalize.");
   }
   if (schema is List || schema is Map ) {
     var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
     return method(schema, value, parent, key, visit, addEntity);
   }
-
   var result = schema.normalize(value, parent, key, visit, addEntity);
 
   return result;
@@ -94,8 +94,8 @@ getUnvisit(entities)  {
   unvisit (input, schema) {
 
     if (schema is List || schema is Map ) {
-      //var method = (schema is List) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
-      return null;//method(schema, input, unvisit);
+      var method = (schema is List) ? ArrayUtils.denormalize : ObjectUtils.denormalize1;
+      return method(schema, input, unvisit);
     }
 
     if (input == null) {

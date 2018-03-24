@@ -67,7 +67,7 @@ class EntitySchema {
     }
     else if (idAttributeFun != null) {
       _getId = idAttributeFun;
-      idAttribute = idAttributeFun;
+     // idAttribute = idAttributeFun;
     }
     else {
       print(idAttribute);

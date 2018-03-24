@@ -53,7 +53,7 @@ class PolymorphicSchema {
 
 
   denormalizeValue(value, unvisit) {
-    var schemaKey =  value["schema"];
+    var schemaKey =  value is Map ?value["schema"]: null;
     if (!isSingleSchema() && schemaKey==null) {
       return value;
     }

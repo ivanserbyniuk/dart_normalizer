@@ -24,20 +24,20 @@ void main() {
 }
     """;
 
-  test("normalizes an object" ,(){
-
+  test("normalizes an object", () {
     var userSchema = new EntitySchema('user');
     var schema = new ObjectSchema({
       "user": userSchema,
     });
-    var test = { "user": { "id": 1 } };
+    var test = { "user": { "id": 1}};
     expect(N.normalize(test, schema), fromJson(expectedJson));
   });
 
 
-  test("normalizes plain objects as shorthand for ObjectSchema ", (){
+  test("normalizes plain objects as shorthand for ObjectSchema ", () {
     var userSchema = new EntitySchema('user');
-    expect(N.normalize({ "user": { "id": 1 } }, { "user": userSchema }),fromJson(expectedJson));
+    expect(N.normalize({ "user": { "id": 1}}, { "user": userSchema}),
+        fromJson(expectedJson));
   });
 
 
@@ -55,8 +55,29 @@ void main() {
     "bar": "1"
   }
 }""";
-      var userSchema = new EntitySchema('user');
-  var users = { "foo": userSchema, "bar": userSchema, "baz": userSchema };
-  expect(N.normalize({ "foo": {}, "bar": { "id": '1' } }, users), fromJson(expectedJson));
-});
+    var userSchema = new EntitySchema('user');
+    var users = { "foo": userSchema, "bar": userSchema, "baz": userSchema};
+    expect(N.normalize({ "bar": { "id": '1'}}, users), fromJson(expectedJson));
+  });
+
+  test('denormalizes an object', () {
+    var expectedJson = """
+      {
+  "user": {
+    "id": 1,
+    "name": "Nacho"
+  }
+}""";
+    var userSchema = new EntitySchema('user');
+    var object = new ObjectSchema({
+      "user": userSchema
+    });
+    var entities = {
+      "user": {
+        1: { "id": 1, "name": 'Nacho'}
+      }
+    };
+    expect(
+        N.denormalize({ "user": 1}, object, entities), fromJson(expectedJson));
+  });
 }

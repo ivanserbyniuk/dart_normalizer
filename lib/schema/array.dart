@@ -13,6 +13,10 @@ var values = getValues(input);
 return values.map((value) => visit(value, parent, key, schema, addEntity)).toList();
 }
 
+ denormalize(schema, input, unvisit) {
+    schema = validateSchema(schema);
+    return input != null && input is Iterable ? input.map((entityOrId) => unvisit(entityOrId, schema)) : input;
+}
 
 
 class ArraySchema extends PolymorphicSchema {
@@ -23,6 +27,11 @@ class ArraySchema extends PolymorphicSchema {
     return values
         .map((value) => this.normalizeValue(value, parent, key, visit, addEntity))
         .where((value) => value !=null).toList();
+  }
+
+  denormalize(input, unvisit) {
+    print("input $input");
+    return input !=null && input is Iterable ? input.map((value) => this.denormalizeValue(value, unvisit)) : input;
   }
 }
 
