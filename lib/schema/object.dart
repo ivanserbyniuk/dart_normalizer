@@ -22,12 +22,13 @@ normalize1(schema, input, parent, key, visit, addEntity) {
 
 denormalize1(schema, input, unvisit) {
  // return denormalizeImmutable(schema, input, unvisit);
- print("den schema $schema");
+
   Map object = {};
   (schema.keys).forEach((key) {
     print("key$key");
 
     if (object[key] != null) {
+      print("key$key");
       object[key] = unvisit(object[key], schema[key]);
     }
   });

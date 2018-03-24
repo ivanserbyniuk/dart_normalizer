@@ -10,7 +10,8 @@ class EntitySchema {
   var schema;
 
 
-  var getDefaultGetId = (idAttribute) => (input, paremt, key) => input[idAttribute];
+  var getDefaultGetId = (idAttribute) =>
+      (input, paremt, key) => input[idAttribute];
 
   EntitySchema(this.key, {definition, options, idAttribute}) {
     if (key == null) {
@@ -21,9 +22,9 @@ class EntitySchema {
       return {entityA: [entityA], entityA: [entityB]};
     };
     var processStrategy = (input) => ([input]);
-   if (idAttribute == null) {
+    if (idAttribute == null) {
       // this.idAttribute = "id";
-       this._getId = getDefaultGetId("id");
+      this._getId = getDefaultGetId("id");
     }
     else {
       this._getId = idAttribute is String
@@ -69,6 +70,21 @@ class EntitySchema {
 
   getId(input, parent, key) {
     return this._getId(input, parent, key);
+  }
+
+  denormalize(Map entity, unvisit) {
+    print ("denorm");
+ /*   if (ImmutableUtils.isImmutable(entity)) {
+      return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit);
+    }*/
+
+    this.schema.keys.forEach((key1) {
+      if (entity.containsKey((key1))) {
+      var schema = this.schema[key];
+      entity[key] = unvisit(entity[key], schema);
+      }
+      });
+    return entity;
   }
 
 }

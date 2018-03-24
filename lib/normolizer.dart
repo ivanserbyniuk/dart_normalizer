@@ -47,17 +47,17 @@ addEntities(entities) =>
         };
 
 
-unvisitEntity(id, schema, unvisit, getEntity, cache) {
+unvisitEntity(id, schema, unvisit, getEntity, Map cache) {
   var entity = getEntity(id, schema);
   if (entity is Map) {
     return entity;
   }
 
-  if (!cache[schema.key]) {
+  if (cache.containsKey(schema.key)) {
     cache[schema.key] = {};
   }
 
-  if (!cache[schema.key][id]) {
+  if(cache.containsKey(schema.key) && cache[schema.key][id] != null) {
 // Ensure we don't mutate it non-immutable objects
     var entityCopy = isImmutable(entity) ? entity : [entity];
 
