@@ -23,7 +23,6 @@ class ArraySchema extends PolymorphicSchema {
   ArraySchema(definition, {schemaAttribute}) : super(definition, schemaAttribute);
 
   normalize(input, parent, key, visit, addEntity) {
-    print("array normalize");
     final values = getValues(input);
     var list = values
         .map((value) => this.normalizeValue(value, parent, key, visit, addEntity))

@@ -16,7 +16,6 @@ normalize(input, schema) {
 
 
 visit( value,  parent, key,  schema, addEntity) {
-  print("visit value $value $key");
 if( value == null) {
    throw new Exception("Unexpected input given to normalize.");
   }
@@ -38,7 +37,6 @@ addEntities(entities) =>
       }
 
       var existingEntity = entities[schemaKey][id];
-      print("existingEntity $existingEntity");
       if (existingEntity != null) {
         entities[schemaKey][id] = schema.merge(existingEntity, processedEntity);
       } else {
@@ -92,10 +90,8 @@ getEntities(entities) {
 getUnvisit(entities)  {
   var cache = {};
   var getEntity = getEntities(entities);
-  print("entity $getEntity");
   unvisit (input, schema) {
     if (schema is List || schema is Map ) {
-      print("entity $getEntity");
 
       var method = (schema is List) ? ArrayUtils.denormalize : ObjectUtils.denormalize1;
       return method(schema, input, unvisit);
@@ -108,7 +104,6 @@ getUnvisit(entities)  {
     if (schema is EntitySchema) {
       return unvisitEntity(input, schema, unvisit, getEntity, cache);
     }
-    print("denotm-1 $schema");
     return schema.denormalize(input, unvisit);
   }
 

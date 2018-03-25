@@ -5,10 +5,8 @@ import 'package:dart_normalizer/schema/immutable_utils.dart';
 normalize1(schema, input, parent, key, visit, addEntity) {
   Map<dynamic, dynamic> object = {};
   object.addAll(input);
-  print("object $object");
   (schema.keys).forEach((key) {
     var localSchema = schema[key];
-    print("input$input");
      if(input[key]!= null) { //todo #hack need to check
     var value = visit(input[key], input, key, localSchema, addEntity);
     if (value == null) {
@@ -22,16 +20,12 @@ normalize1(schema, input, parent, key, visit, addEntity) {
 }
 
 denormalize1(schema, input, unvisit) {
-print("denormalize1");
  // return denormalizeImmutable(schema, input, unvisit);
 
   Map object = {};
   object.addAll(input);
   (schema.keys).forEach((key) {
-    print("key$key");
-
     if (object[key] != null) {
-      print("key$key");
       object[key] = unvisit(object[key], schema[key]);
     }
   });
