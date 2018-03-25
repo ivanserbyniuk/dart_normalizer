@@ -26,6 +26,7 @@ print("denormalize1");
  // return denormalizeImmutable(schema, input, unvisit);
 
   Map object = {};
+  object.addAll(input);
   (schema.keys).forEach((key) {
     print("key$key");
 
@@ -38,8 +39,10 @@ print("denormalize1");
 }
 
 
+
+
 class ObjectSchema {
-  Map schema;
+  Map schema = {};
 
   ObjectSchema(definition) {
     this.define(definition);
@@ -47,10 +50,11 @@ class ObjectSchema {
 
   define(Map definition) {
     if (definition != null) {
-      this.schema = definition.map((key, value) {
+      this.schema.addAll({});
+      this.schema.addAll(definition);/*.map((key, value) {
         final schema = definition[key];
         return MapEntry(key, schema);
-      });
+      });*/
     }
     if (schema == null) {
       this.schema = {};
