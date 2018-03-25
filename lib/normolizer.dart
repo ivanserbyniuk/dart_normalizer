@@ -3,6 +3,8 @@ import 'package:dart_normalizer/schema/immutable_utils.dart';
 import 'package:dart_normalizer/schema/object.dart' as ObjectUtils;
 import 'package:dart_normalizer/schema/array.dart' as ArrayUtils;
 import 'package:dart_normalizer/schema/object.dart';
+import 'package:dart_normalizer/schema/schema.dart';
+import 'package:dart_normalizer/schema/utils.dart';
 
 
 
@@ -16,10 +18,10 @@ normalize(input, schema) {
 
 
 visit( value,  parent, key,  schema, addEntity) {
-if( value == null) {
+if( value == null /*|| !isObject(value)*/ ) {
    throw new Exception("Unexpected input given to normalize.");
   }
-  if (schema is List || schema is Map ) {
+  if (schema is List || (!isSchema(schema)) ) {
     var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
     return method(schema, value, parent, key, visit, addEntity);
   }
@@ -47,7 +49,7 @@ addEntities(entities) =>
 
 unvisitEntity(id, schema, unvisit, getEntity, Map cache) {
   var entity = getEntity(id, schema);
-  if (entity is Map) {
+  if (entity == null || isObject(entity)) {
     return entity;
   }
 
@@ -75,7 +77,7 @@ getEntities(entities) {
   return (entityOrId, schema) {
     var schemaKey = schema.key;
 
-    if (entityOrId is Map) {
+    if (isObject(entityOrId)) {
       return entityOrId;
     }
 
@@ -91,7 +93,7 @@ getUnvisit(entities)  {
   var cache = {};
   var getEntity = getEntities(entities);
   unvisit (input, schema) {
-    if (schema is List || schema is Map ) {
+    if (isObject(schema) && !isSchema(schema)) {
 
       var method = (schema is List) ? ArrayUtils.denormalize : ObjectUtils.denormalize1;
       return method(schema, input, unvisit);

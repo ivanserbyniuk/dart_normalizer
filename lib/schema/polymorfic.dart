@@ -1,6 +1,7 @@
 import 'package:dart_normalizer/schema/immutable_utils.dart';
+import 'package:dart_normalizer/schema/schema.dart';
 
-class PolymorphicSchema {
+class PolymorphicSchema extends Schema{
   dynamic _schemaAttribute;
   dynamic schema;
 

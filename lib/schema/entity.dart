@@ -1,7 +1,9 @@
 import 'package:dart_normalizer/schema/immutable_utils.dart' as ImmutableUtils;
+import 'package:dart_normalizer/schema/schema.dart';
+import 'package:dart_normalizer/schema/utils.dart';
 
 
-class EntitySchema {
+class EntitySchema extends Schema{
   String key;
   var idAttribute = 'id';
   var _getId;
@@ -45,19 +47,20 @@ class EntitySchema {
   }
 
   merge(entityA, entityB) {
-    print("mergeSt$entityA, $entityB $_mergeStrategy");
     return this._mergeStrategy(entityA, entityB);
   }
 
   normalize(input, parent, key, visit, addEntity) {
+    Map map = {};
     final processedEntity = this._processStrategy(input, parent, key);
+    map.addAll(processedEntity);
     (this.schema.keys).forEach((key) {
-      if (processedEntity.containsKey(key) && processedEntity[key] is Map) {
+      if (processedEntity.containsKey(key) && isObject(processedEntity[key])) {
         final schema = this.schema[key];
-        processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
+        map[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
       }
     });
-    addEntity(this, processedEntity, input, parent, key);
+    addEntity(this, map, input, parent, key);
     return getId(input, parent, key);
   }
 
@@ -66,11 +69,6 @@ class EntitySchema {
   }
 
   denormalize(Map entity, unvisit) {
-    print ("denorm");
- /*   if (ImmutableUtils.isImmutable(entity)) {
-      return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit);
-    }*/
-
     this.schema.keys.forEach((key1) {
       if (entity.containsKey((key1))) {
       var schema = this.schema[key];

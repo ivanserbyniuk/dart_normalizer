@@ -1,5 +1,6 @@
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/immutable_utils.dart';
+import 'package:dart_normalizer/schema/schema.dart';
 
 
 normalize1(schema, input, parent, key, visit, addEntity) {
@@ -35,7 +36,7 @@ denormalize1(schema, input, unvisit) {
 
 
 
-class ObjectSchema {
+class ObjectSchema extends Schema {
   Map schema = {};
 
   ObjectSchema(definition) {
@@ -61,7 +62,6 @@ class ObjectSchema {
   }
 
   denormalize( input, unvisit){
-    print("denormalize2");
     return denormalize1(schema, input, unvisit);
   }
 
