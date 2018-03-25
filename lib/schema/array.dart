@@ -30,7 +30,6 @@ class ArraySchema extends PolymorphicSchema {
   }
 
   denormalize(input, unvisit) {
-    print("input $input");
     return input !=null && input is Iterable ? input.map((value) => this.denormalizeValue(value, unvisit)) : input;
   }
 }

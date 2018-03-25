@@ -72,7 +72,7 @@ unvisitEntity(id, schema, unvisit, getEntity, Map cache) {
 
 
 getEntities(entities) {
-  var isIm = isImmutable(entities);
+  var isIm = false;//isImmutable(entities);
 
   return (entityOrId, schema) {
     var schemaKey = schema.key;
@@ -88,11 +88,15 @@ getEntities(entities) {
 }
 
 
+
 getUnvisit(entities)  {
   var cache = {};
   var getEntity = getEntities(entities);
+  print("entity $getEntity");
   unvisit (input, schema) {
     if (schema is List || schema is Map ) {
+      print("entity $getEntity");
+
       var method = (schema is List) ? ArrayUtils.denormalize : ObjectUtils.denormalize1;
       return method(schema, input, unvisit);
     }

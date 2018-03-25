@@ -35,7 +35,6 @@ void main() {
         """;
     var test = [ { "id": 1}, { "id": 2}];
     Map mapTest = fromJson(expectedJson);
-    print(mapTest);
     expect(N.normalize(test, [userSchema]), fromJson(expectedJson));
   });
 

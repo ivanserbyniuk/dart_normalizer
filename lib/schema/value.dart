@@ -18,7 +18,6 @@ class  Values extends PolymorphicSchema {
   }
 
   denormalize( input, unvisit) {
-    print("denorm$input");
     return input.map((key, value) => MapEntry(key, denormalizeValue(value, unvisit)));
     return (input.keys).reduce((output, key)  {
         var entityOrId = input[key];

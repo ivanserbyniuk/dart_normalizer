@@ -47,8 +47,7 @@ void main() {
     "user": {
       "1": {
         "id": "1"
-      },
-      "undefined": {}
+      }
     }
   },
   "result": {

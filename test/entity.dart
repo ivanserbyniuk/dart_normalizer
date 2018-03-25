@@ -228,7 +228,6 @@ void main() {
   ]
 }""";
     var mergeStrategy = ( entityA,  entityB) {
-      print("entityA$entityA entityB$entityB");
       return entityB..addAll(entityA)..addAll({"name": entityA["name"]});
     };
     var mySchema = new EntitySchema('tacos', mergeStrategy: mergeStrategy);
@@ -240,7 +239,51 @@ void main() {
     expect(normalize(input, [ mySchema]), fromJson(expectedJson));
   });
 
+  //Denormalization
 
+  test('denormalizes an entity', () {
+    var expectedJson = """ {
+      "id": 1,
+      "type": "foo"
+    }""";
+    var mySchema = new EntitySchema('tacos');
+    const entities = {
+      "tacos": {
+        1: { "id": 1, "type": 'foo'}
+      }
+    };
+    expect(denormalize(1, mySchema, entities), fromJson(expectedJson));
+  });
+
+  test('denormalizes deep entities', () {
+    var expectedJson1 = """ {
+    "food": {
+      "id": 1
+   },
+  " id": 1
+  }""";
+
+    var expectedJson2 = """  {
+      "id": 2
+    }""";
+    var foodSchema = new EntitySchema('foods');
+    var menuSchema = new EntitySchema('menus', definition: {
+      "food": foodSchema
+    });
+
+    const entities = {
+      "menus": {
+        1: { "id": 1, "food": 1},
+        2: { "id": 2}
+      },
+      "foods": {
+        1: { "id": 1}
+      }
+    };
+
+    expect(denormalize(1, menuSchema, entities), fromJson(expectedJson1));
+    expect(denormalize(2, menuSchema, entities), fromJson(expectedJson2));
+  })
 /*
 /*  test('is run before and passed to the schema normalization', () {
     var expectedJson = """
@@ -264,19 +307,7 @@ void main() {
   "result": "123"
 }""";
 
-test('denormalizes an entity', () {
-    var expectedJson = """ {
-      "id": 1,
-      "type": "foo"
-    }""";
-    var mySchema = new EntitySchema('tacos');
-    const entities = {
-      "tacos": {
-        1: { "id": 1, "type": 'foo'}
-      }
-    };
-    expect(denormalize(1, mySchema, entities), fromJson(expectedJson));
-  });
+
 
   test('denormalizes deep entities', () {
     var expectedJson1 = """ {
