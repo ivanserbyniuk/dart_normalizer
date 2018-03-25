@@ -31,13 +31,19 @@ class PolymorphicSchema {
 
   inferSchema(input, parent, key) {
  if (isSingleSchema()) {
+   print("return schema");
    return schema;
  }
+ print("attr schemap");
     var attr = getSchemaAttribute(input, parent, key);
     return this.schema[attr];
   }
 
   normalizeValue(value, parent, key, visit, addEntity) {
+    if(value == null) {
+      return null;
+    }
+   print("normValue $value");
     final schema = inferSchema(value, parent, key);
     if (schema == null) {
       return value;

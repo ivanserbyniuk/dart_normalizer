@@ -224,14 +224,7 @@ void main() {
 }""";
     var filling = new EntitySchema('fillings');
     var taco = new EntitySchema('tacos', definition: { "fillings": [ filling]});
-    const entities = {
-      "tacos": {
-        '123': {
-          "id": '123',
-          "fillings": null
-        }
-      }
-    };
+
     const entities1 = {
       "tacos": {
         '123': {
@@ -242,7 +235,6 @@ void main() {
     };
 
     expect(N.denormalize('123', taco, entities1), fromJson(expectedJson));
-    expect(N.denormalize('123', taco, entities), fromJson(expectedJson));//todo test
   });
 
   test('denormalizes a single entity', ()  {

@@ -3,7 +3,7 @@ import 'package:dart_normalizer/schema/polymorfic.dart';
 
 var validateSchema = (definition) => definition[0];
 
-var  getValues = (input) => (input is List) ? input : input.values;
+var  getValues = (input) => (input is List) ? input : input.keys.map((item) =>input[item]);
 
  normalize(schema, input, parent, key, visit, addEntity) {
    schema = validateSchema(schema);
@@ -23,10 +23,13 @@ class ArraySchema extends PolymorphicSchema {
   ArraySchema(definition, {schemaAttribute}) : super(definition, schemaAttribute);
 
   normalize(input, parent, key, visit, addEntity) {
+    print("array normalize");
     final values = getValues(input);
-    return values
+    var list = values
         .map((value) => this.normalizeValue(value, parent, key, visit, addEntity))
         .where((value) => value !=null).toList();
+    print("list $list");
+    return list;
   }
 
   denormalize(input, unvisit) {
