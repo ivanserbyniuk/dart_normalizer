@@ -313,7 +313,7 @@ void main() {
     { "id": '456', "schema": 'cats' }
   ];
 
-  expect(denormalize(input, listSchema, entities), fromJson(expectedJson));
+  expect(N.denormalize(input, listSchema, entities), fromJson(expectedJson));
 });
 
 }
