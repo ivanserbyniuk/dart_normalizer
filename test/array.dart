@@ -142,10 +142,9 @@ void main() {
     var test =
     [{ "type": 'cats', "id": '123'},
     { "type": 'people', "id": '123'},
-    { "id:": '789', "name": 'fido'},
+    { "id": '789', "name": 'fido'},
     { "type": 'cats', "id": '456'}
     ];
-    //print(N.normalize(test, listSchema));
     expect(N.normalize(test, listSchema), fromJson(expectedJson));
   });
 
