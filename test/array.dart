@@ -287,7 +287,7 @@ void main() {
     "people": peopleSchema
   }, schemaAttribute:(input, parent, key) => input["type"]!= null ? input["type"] : 'dogs');
 
-  const entities = {
+    const entities = {
     "cats": {
       '123': {
         "id": '123',
