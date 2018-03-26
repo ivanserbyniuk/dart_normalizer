@@ -133,6 +133,27 @@ void main() {
   expect(normalize(input, articleEntity),fromJson(expectedJson));
 });
 
-
+  test('denormalizes entities', () {
+    var expectedJson = """ 
+     [
+       {
+    "id": 1,
+    "type": "foo"
+  },
+       {
+    "id": 2,
+    "type": "bar"
+  }
+]""";
+    var mySchema = new EntitySchema('tacos');
+  var entities = {
+    "tacos": {
+      1: { "id": 1, "type": 'foo' },
+      2: { "id": 2, "type": 'bar' }
+    }
+  };
+  var input = [1, 2];
+  expect(denormalize(input, [mySchema], entities),fromJson(expectedJson));
+});
 
 }
