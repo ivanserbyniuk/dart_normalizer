@@ -260,7 +260,7 @@ void main() {
     "food": {
       "id": 1
    },
-  " id": 1
+  "id": 1
   }""";
 
     var expectedJson2 = """  {

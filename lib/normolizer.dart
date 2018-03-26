@@ -18,8 +18,8 @@ normalize(input, schema) {
 
 
 visit( value,  parent, key,  schema, addEntity) {
-if( value == null /*|| !isObject(value)*/ ) {
-return value;
+if( value == null || (value is Map && isUndefined(value))||(!isObject(value) ) && !isSchema(value)) {
+  return (value is Map)&& isUndefined(value) ? null :value;
 }
   if (schema is List || (!isSchema(schema)) ) {
     var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
