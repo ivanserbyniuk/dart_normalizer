@@ -3,7 +3,7 @@ import 'package:dart_normalizer/schema/polymorfic.dart';
 
 var validateSchema = (definition) => definition[0];
 
-var  getValues = (input) => (input is List) ? input : input.keys.map((item) =>input[item]);
+  getValues (input) => (input is List) ? input : input.values;
 
  normalize(schema, input, parent, key, visit, addEntity) {
    schema = validateSchema(schema);
@@ -15,7 +15,7 @@ return values.map((value) => visit(value, parent, key, schema, addEntity)).toLis
 
  denormalize(schema, input, unvisit) {
     schema = validateSchema(schema);
-    return input != null && input is Iterable ? input.map((entityOrId) => unvisit(entityOrId, schema)) : input;
+    return (input != null && input is Iterable) ? input.map((entityOrId) => unvisit(entityOrId, schema)) : input;
 }
 
 
@@ -32,6 +32,8 @@ class ArraySchema extends PolymorphicSchema {
   }
 
   denormalize(input, unvisit) {
+    print("array");
+
     return input !=null && input is Iterable ? input.map((value) => this.denormalizeValue(value, unvisit)) : input;
   }
 }

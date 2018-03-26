@@ -69,13 +69,14 @@ class EntitySchema extends Schema{
   }
 
   denormalize(Map entity, unvisit) {
-    this.schema.keys.forEach((key1) {
-      if (entity.containsKey((key1))) {
+    print("entity");
+    this.schema.keys.forEach((key) {
+      if (entity.containsKey((key))) {
       var schema = this.schema[key];
       entity[key] = unvisit(entity[key], schema);
       }
       });
-    return entity;
+    return entity.map((key, value) => MapEntry(key, unvisit(entity[key],schema)));
   }
 
 }

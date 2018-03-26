@@ -60,6 +60,7 @@ class PolymorphicSchema extends Schema{
 
 
   denormalizeValue(value, unvisit) {
+    print("polimorfic");
     var schemaKey =  value is Map ?value["schema"]: null;
     if (!isSingleSchema() && schemaKey==null) {
       return value;

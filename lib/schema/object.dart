@@ -22,7 +22,7 @@ normalize1(schema, input, parent, key, visit, addEntity) {
 
 denormalize1(schema, input, unvisit) {
  // return denormalizeImmutable(schema, input, unvisit);
-
+  print("denorm obj");
   Map object = {};
   object.addAll(input);
   (schema.keys).forEach((key) {
@@ -62,6 +62,7 @@ class ObjectSchema extends Schema {
   }
 
   denormalize( input, unvisit){
+    print("object");
     return denormalize1(schema, input, unvisit);
   }
 

@@ -99,12 +99,40 @@ void main() {
     };
     expect(normalize(input, article), fromJson(expectedJson));
   });
-/*  test('ignores null values', ()  {
-      const myEntity = new schema.Entity('myentities');
-  expect(normalize([null], [myEntity])).toMatchSnapshot();
-  expect(normalize([undefined], [myEntity])).toMatchSnapshot();
-  expect(normalize([false], [myEntity])).toMatchSnapshot();
-});*/
+  
+  test('ignores null values', (){
+    var expectedJson = """ {
+  "entities": {},
+  "result":  [
+  ]
+}""";
+    var myEntity = new EntitySchema('myentities');
+    expect(normalize([null], [myEntity]), fromJson(expectedJson));
+    expect(normalize([{}], [myEntity]), fromJson(expectedJson));
+    // expect(normalize([false], [myEntity]),fromJson(expectedJson));
+  });
+
+
+  test('passes over pre-normalized values', () {
+    var expectedJson = """ {
+  "entities": {
+    "articles": {
+      "123": {
+        "author": 1,
+        "id": "123",
+        "title": "normalizr is great!"
+      }
+    }
+  },
+  "result": "123"
+} """;
+      var userEntity = new EntitySchema('users');
+  var articleEntity = new EntitySchema('articles',definition:  { "author": userEntity });
+
+  var input = { "id": '123', "title": 'normalizr is great!', "author": 1 };
+  expect(normalize(input, articleEntity),fromJson(expectedJson));
+});
+
 
 
 }

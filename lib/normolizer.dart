@@ -53,13 +53,13 @@ unvisitEntity(id, schema, unvisit, getEntity, Map cache) {
     return entity;
   }
 
-  if (cache.containsKey(schema.key)) {
+  if (!cache.containsKey(schema.key)) {
     cache[schema.key] = {};
   }
 
   if(cache.containsKey(schema.key) && cache[schema.key][id] != null) {
 // Ensure we don't mutate it non-immutable objects
-    var entityCopy = isImmutable(entity) ? entity : [entity];
+    var entityCopy = isImmutable(entity) ? entity : new Map()..addAll(entity);
 
 // Need to set this first so that if it is referenced further within the
 // denormalization the reference will already exist.
@@ -116,5 +116,5 @@ getUnvisit(entities)  {
 if (input !=null) {
 return getUnvisit(entities)(input, schema);
 }
-else {return {};}
+//else {return {};}
 }
