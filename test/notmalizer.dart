@@ -104,12 +104,25 @@ void main() {
     var expectedJson = """ {
   "entities": {},
   "result":  [
+   null
+  ]
+}""";
+
+    var expectedJson2 = """ {
+  "entities": {},
+  "result":  [
+  ]""";
+
+   var expectedJson3 = """ {
+      "entities": {},
+  "result":  [
+  false
   ]
 }""";
     var myEntity = new EntitySchema('myentities');
     expect(normalize([null], [myEntity]), fromJson(expectedJson));
-    expect(normalize([{}], [myEntity]), fromJson(expectedJson));
-    // expect(normalize([false], [myEntity]),fromJson(expectedJson));
+    //expect(normalize([{}], [myEntity]), fromJson(expectedJson));
+     expect(normalize([false], [myEntity]),fromJson(expectedJson));
   });
 
 

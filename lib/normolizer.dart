@@ -19,8 +19,8 @@ normalize(input, schema) {
 
 visit( value,  parent, key,  schema, addEntity) {
 if( value == null /*|| !isObject(value)*/ ) {
-   throw new Exception("Unexpected input given to normalize.");
-  }
+return value;
+}
   if (schema is List || (!isSchema(schema)) ) {
     var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
     return method(schema, value, parent, key, visit, addEntity);
