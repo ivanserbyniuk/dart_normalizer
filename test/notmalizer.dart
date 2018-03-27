@@ -165,6 +165,67 @@ void main() {
   expect(denormalize(input, [mySchema], entities),fromJson(expectedJson));
 });
 
+  test('denormalizes nested entities', () {
 
+    var expectedJson =""" 
+     {
+  "author":  {
+    "id": "8472",
+    "name": "Paul"
+  },
+  "body": "This article is great.",
+  "comments":  [
+     {
+      "comment": "I like it!",
+      "id": "comment-123-4738",
+      "user":  {
+        "id": "10293",
+        "name": "Jane"
+      }
+    }
+  ],
+  "id": "123",
+  "title": "A Great Article"
+}
+    """;
+      var user = new EntitySchema('users');
+  var comment = new EntitySchema('comments', definition: {
+    "user": user
+  });
+  var article = new EntitySchema('articles', definition: {
+    "author": user,
+    "comments": [comment]
+  });
+
+  const entities = {
+    "articles": {
+      '123': {
+        "author": '8472',
+        "body": 'This article is great.',
+        "comments": ['comment-123-4738'],
+        "id": '123',
+        "title": 'A Great Article'
+      }
+    },
+    "comments": {
+      'comment-123-4738': {
+        "comment": 'I like it!',
+        "id": 'comment-123-4738',
+        "user": '10293'
+      }
+    },
+    "users": {
+      '10293': {
+        "id": '10293',
+        "name": 'Jane'
+      },
+      '8472': {
+        "id": '8472',
+        "name": 'Paul'
+      }
+    }
+  };
+  expect(denormalize('123', article, entities),fromJson(expectedJson));
+});
 
 }
