@@ -2,9 +2,10 @@ import 'package:dart_normalizer/schema/polymorfic.dart';
 
 
 class UnionSchema extends PolymorphicSchema {
-  UnionSchema(definition, schemaAttribute):super(definition, schemaAttribute){
-    if (schemaAttribute==null) {
-      throw new Exception('Expected option "schemaAttribute" not found on UnionSchema.');
+  UnionSchema(definition, schemaAttribute) :super(definition, schemaAttribute) {
+    if (schemaAttribute == null) {
+      throw new Exception(
+          'Expected option "schemaAttribute" not found on UnionSchema.');
     }
   }
 

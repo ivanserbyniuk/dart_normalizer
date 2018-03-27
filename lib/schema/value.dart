@@ -1,23 +1,23 @@
-import 'package:dart_normalizer/Pair.dart';
 import 'package:dart_normalizer/schema/polymorfic.dart';
 
-class  Values extends PolymorphicSchema {
+class Values extends PolymorphicSchema {
   Values(definition, {schemaAttribute}) : super(definition, schemaAttribute);
 
   normalize(Map input, parent, String key, visit, addEntity) {
-    Map<dynamic, dynamic> object ={};
-    input.forEach((key, value){
-      if(value != null) {
+    Map<dynamic, dynamic> object = {};
+    input.forEach((key, value) {
+      if (value != null) {
         object[key] = value;
       }
     });
-    object.addAll(object.map((key, value)=> MapEntry(key, normalizeValue(value, input, key, visit, addEntity)) ));
+    object.addAll(object.map((key, value) =>
+        MapEntry(key, normalizeValue(value, input, key, visit, addEntity))));
     return object;
-
   }
 
-  denormalize( input, unvisit) {
-    return input.map((key, value) => MapEntry(key, denormalizeValue(value, unvisit)));
+  denormalize(input, unvisit) {
+    return input.map((key, value) =>
+        MapEntry(key, denormalizeValue(value, unvisit)));
   }
 }
 

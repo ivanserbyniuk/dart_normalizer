@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dart_normalizer/Pair.dart';
 import 'package:dart_normalizer/normolizer.dart';
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/object.dart';
@@ -236,7 +235,7 @@ void main() {
     1
   ]
 }""";
-    var mergeStrategy = ( entityA,  entityB) {
+    var mergeStrategy = (entityA, entityB) {
       return entityB..addAll(entityA)..addAll({"name": entityA["name"]});
     };
     var mySchema = new EntitySchema('tacos', mergeStrategy: mergeStrategy);

@@ -1,20 +1,20 @@
 import 'package:dart_normalizer/schema/immutable_utils.dart';
 import 'package:dart_normalizer/schema/schema.dart';
 
-class PolymorphicSchema extends Schema{
+class PolymorphicSchema extends Schema {
   dynamic _schemaAttribute;
   dynamic schema;
 
   PolymorphicSchema(definition, schemaAttribute) {
     if (schemaAttribute != null) {
       this._schemaAttribute = schemaAttribute is String
-          ? (input,p1,p2) => input[schemaAttribute]
+          ? (input, p1, p2) => input[schemaAttribute]
           : schemaAttribute;
     }
     this.define(definition);
   }
 
-   isSingleSchema() {
+  isSingleSchema() {
     return _schemaAttribute == null;
   }
 
@@ -23,22 +23,22 @@ class PolymorphicSchema extends Schema{
   }
 
   getSchemaAttribute(input, parent, key) {
-    if(input == null) {
+    if (input == null) {
       return null;
     }
-    return  this._schemaAttribute(input, parent, key);
+    return this._schemaAttribute(input, parent, key);
   }
 
   inferSchema(input, parent, key) {
- if (isSingleSchema()) {
-   return schema;
- }
+    if (isSingleSchema()) {
+      return schema;
+    }
     var attr = getSchemaAttribute(input, parent, key);
     return this.schema[attr];
   }
 
   normalizeValue(value, parent, key, visit, addEntity) {
-    if(value == null) {
+    if (value == null) {
       return null;
     }
     final schema = inferSchema(value, parent, key);
@@ -56,15 +56,17 @@ class PolymorphicSchema extends Schema{
 
 
   denormalizeValue(value, unvisit) {
-    var schemaKey =  value is Map ?value["schema"]: null;
-    if (!isSingleSchema() && schemaKey==null) {
+    var schemaKey = value is Map ? value["schema"] : null;
+    if (!isSingleSchema() && schemaKey == null) {
       return value;
     }
     var id;
-    if(!(value is Map)){
+    if (!(value is Map)) {
       id = value;
     }
-    else { id =  value["id"];}
+    else {
+      id = value["id"];
+    }
     print(value);
     var schema = isSingleSchema() ? this.schema : this.schema[schemaKey];
     var key = id == null ? value : id;

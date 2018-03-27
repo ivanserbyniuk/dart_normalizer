@@ -248,7 +248,7 @@ void main() {
 
   //======================
 
-  test('denormalizes a single entity', ()  {
+  test('denormalizes a single entity', () {
     var expectedJson = """ [
      {
     "id": 1,
@@ -260,20 +260,20 @@ void main() {
   }
 ]
     """;
-      var cats = new EntitySchema('cats');
-  const entities = {
-    "cats": {
-      1: { "id": 1, "name": 'Milo' },
-      2: { "id": 2,"name": 'Jake' }
-    }
-  };
-  var catList = new ArraySchema(cats);
-  expect(N.denormalize([ 1, 2 ], catList, entities), fromJson(expectedJson));
-});
+    var cats = new EntitySchema('cats');
+    const entities = {
+      "cats": {
+        1: { "id": 1, "name": 'Milo'},
+        2: { "id": 2, "name": 'Jake'}
+      }
+    };
+    var catList = new ArraySchema(cats);
+    expect(N.denormalize([ 1, 2], catList, entities), fromJson(expectedJson));
+  });
 
   //=========================
 
-  test('denormalizes multiple entities', (){
+  test('denormalizes multiple entities', () {
     var expectedJson = """ [
      {
         "id": "123",
@@ -297,36 +297,39 @@ void main() {
       "cats": catSchema,
       "dogs": {},
       "people": peopleSchema
-    }, schemaAttribute:(input, parent, key) => input["type"]!= null ? input["type"] : 'dogs');
+    }, schemaAttribute: (input, parent, key) =>
+    input["type"] != null
+        ? input["type"]
+        : 'dogs');
 
     const entities = {
-    "cats": {
-      '123': {
-        "id": '123',
-        "type": 'cats'
+      "cats": {
+        '123': {
+          "id": '123',
+          "type": 'cats'
+        },
+        '456': {
+          "id": '456',
+          "type": 'cats'
+        }
       },
-      '456': {
-        "id": '456',
-        "type": 'cats'
+      "person": {
+        '123': {
+          "id": '123',
+          "type": 'people'
+        }
       }
-    },
-    "person": {
-      '123': {
-        "id": '123',
-        "type": 'people'
-      }
-    }
-  };
+    };
 
-  const input = [
-    { "id": '123', "schema": 'cats' },
-    { "id": '123', "schema": 'people' },
-    { "id": { "id": '789' }, "schema": 'dogs' },
-    { "id": '456', "schema": 'cats' }
-  ];
+    const input = [
+      { "id": '123', "schema": 'cats'},
+      { "id": '123', "schema": 'people'},
+      { "id": { "id": '789'}, "schema": 'dogs'},
+      { "id": '456', "schema": 'cats'}
+    ];
 
-  expect(N.denormalize(input, listSchema, entities), fromJson(expectedJson));
-});
+    expect(N.denormalize(input, listSchema, entities), fromJson(expectedJson));
+  });
 }
 
 

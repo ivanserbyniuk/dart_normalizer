@@ -97,7 +97,7 @@ void main() {
 
   //================
 
-  test('ignores null values', (){
+  test('ignores null values', () {
     var expectedJson = """ {
   "entities": {},
   "result":  [
@@ -105,16 +105,16 @@ void main() {
   ]
 }""";
 
-   var expectedJson2 = """ {
+    var expectedJson2 = """ {
       "entities": {},
   "result":  [
   false
   ]
 }""";
     var myEntity = new EntitySchema('myentities');
-     expect(normalize([null], [myEntity]), fromJson(expectedJson));
-     expect(normalize([{}], [myEntity]), fromJson(expectedJson));
-     expect(normalize([false], [myEntity]),fromJson(expectedJson2));
+    expect(normalize([null], [myEntity]), fromJson(expectedJson));
+    expect(normalize([{}], [myEntity]), fromJson(expectedJson));
+    expect(normalize([false], [myEntity]), fromJson(expectedJson2));
   });
 
   //==================
@@ -132,12 +132,13 @@ void main() {
   },
   "result": "123"
 } """;
-      var userEntity = new EntitySchema('users');
-  var articleEntity = new EntitySchema('articles',definition:  { "author": userEntity });
+    var userEntity = new EntitySchema('users');
+    var articleEntity = new EntitySchema(
+        'articles', definition: { "author": userEntity});
 
-  var input = { "id": '123', "title": 'normalizr is great!', "author": 1 };
-  expect(normalize(input, articleEntity),fromJson(expectedJson));
-});
+    var input = { "id": '123', "title": 'normalizr is great!', "author": 1};
+    expect(normalize(input, articleEntity), fromJson(expectedJson));
+  });
 
   //=====================
 
@@ -154,20 +155,20 @@ void main() {
   }
 ]""";
     var mySchema = new EntitySchema('tacos');
-  var entities = {
-    "tacos": {
-      1: { "id": 1, "type": 'foo' },
-      2: { "id": 2, "type": 'bar' }
-    }
-  };
-  var input = [1, 2];
-  expect(denormalize(input, [mySchema], entities),fromJson(expectedJson));
-});
+    var entities = {
+      "tacos": {
+        1: { "id": 1, "type": 'foo'},
+        2: { "id": 2, "type": 'bar'}
+      }
+    };
+    var input = [1, 2];
+    expect(denormalize(input, [mySchema], entities), fromJson(expectedJson));
+  });
 
   //======================
 
   test('denormalizes nested entities', () {
-    var expectedJson =""" 
+    var expectedJson = """ 
      {
   "author":  {
     "id": "8472",
@@ -188,45 +189,45 @@ void main() {
   "title": "A Great Article"
 }
     """;
-      var user = new EntitySchema('users');
-  var comment = new EntitySchema('comments', definition: {
-    "user": user
-  });
-  var article = new EntitySchema('articles', definition: {
-    "author": user,
-    "comments": [comment]
-  });
+    var user = new EntitySchema('users');
+    var comment = new EntitySchema('comments', definition: {
+      "user": user
+    });
+    var article = new EntitySchema('articles', definition: {
+      "author": user,
+      "comments": [comment]
+    });
 
-  const entities = {
-    "articles": {
-      '123': {
-        "author": '8472',
-        "body": 'This article is great.',
-        "comments": ['comment-123-4738'],
-        "id": '123',
-        "title": 'A Great Article'
-      }
-    },
-    "comments": {
-      'comment-123-4738': {
-        "comment": 'I like it!',
-        "id": 'comment-123-4738',
-        "user": '10293'
-      }
-    },
-    "users": {
-      '10293': {
-        "id": '10293',
-        "name": 'Jane'
+    const entities = {
+      "articles": {
+        '123': {
+          "author": '8472',
+          "body": 'This article is great.',
+          "comments": ['comment-123-4738'],
+          "id": '123',
+          "title": 'A Great Article'
+        }
       },
-      '8472': {
-        "id": '8472',
-        "name": 'Paul'
+      "comments": {
+        'comment-123-4738': {
+          "comment": 'I like it!',
+          "id": 'comment-123-4738',
+          "user": '10293'
+        }
+      },
+      "users": {
+        '10293': {
+          "id": '10293',
+          "name": 'Jane'
+        },
+        '8472': {
+          "id": '8472',
+          "name": 'Paul'
+        }
       }
-    }
-  };
-  expect(denormalize('123', article, entities),fromJson(expectedJson));
-});
+    };
+    expect(denormalize('123', article, entities), fromJson(expectedJson));
+  });
 
   //=============================
 
@@ -246,25 +247,28 @@ void main() {
     "name": "Tom"
     }
     ]""";
-      const normalizedData = {
+    const normalizedData = {
       "entities": {
-      "patrons": {
-      '1': { "id": '1', "guest": null, "name": 'Esther' },
-      '2': { "id": '2', "guest": 'guest-2-1', "name": 'Tom' }
-      },
-      "guests": { 'guest-2-1': { "guest_id": 1 } }
+        "patrons": {
+          '1': { "id": '1', "guest": null, "name": 'Esther'},
+          '2': { "id": '2', "guest": 'guest-2-1', "name": 'Tom'}
+        },
+        "guests": { 'guest-2-1': { "guest_id": 1}}
       },
       "result": ['1', '2']
-      };
+    };
 
-      var guestSchema = new EntitySchema(
-      'guests',
-        idAttribute: (value, parent, key) => "${key}-${parent.id}-${value.guest_id}");
+    var guestSchema = new EntitySchema(
+        'guests',
+        idAttribute: (value, parent, key) => "${key}-${parent.id}-${value
+            .guest_id}");
 
-  var patronsSchema = new EntitySchema('patrons', definition: {
-    "guest": guestSchema
+    var patronsSchema = new EntitySchema('patrons', definition: {
+      "guest": guestSchema
+    });
+
+    expect(denormalize(
+        normalizedData["result"], [patronsSchema], normalizedData["entities"]),
+        fromJson(expectedJson));
   });
-
-  expect(denormalize(normalizedData["result"], [patronsSchema], normalizedData["entities"]), fromJson(expectedJson));
-});
 }

@@ -123,12 +123,12 @@ void main() {
 
   var user = new EntitySchema('users');
   var group = new EntitySchema('groups');
-  var entities ={
+  var entities = {
     "users": {
-      1: { "id": 1, "username": 'Janey', "type": 'users' }
+      1: { "id": 1, "username": 'Janey', "type": 'users'}
     },
     "groups": {
-      2: { "id": 2, "groupname": 'People', "type": 'groups' }
+      2: { "id": 2, "groupname": 'People', "type": 'groups'}
     }
   };
 
@@ -155,9 +155,9 @@ void main() {
       "groups": group
     }, 'type');
 
-    var testJson1 = { "id": 1, "schema": "users" };
+    var testJson1 = { "id": 1, "schema": "users"};
     expect(N.denormalize(testJson1, union, entities), fromJson(expectedJson1));
-    var testJson2 = { 'id': 2, 'schema': 'groups' };
+    var testJson2 = { 'id': 2, 'schema': 'groups'};
     expect(N.denormalize(testJson2, union, entities), fromJson(expectedJson2));
   });
 }

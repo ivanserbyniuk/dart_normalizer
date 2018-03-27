@@ -36,7 +36,6 @@ _addEntities(entities) =>
       if (!entities.containsKey(schemaKey)) {
         entities[schemaKey] = {};
       }
-
       var existingEntity = entities[schemaKey][id];
       if (existingEntity != null) {
         entities[schemaKey][id] = schema.merge(existingEntity, processedEntity);
@@ -46,14 +45,15 @@ _addEntities(entities) =>
     };
 
 denormalize(input, schema, entities) {
-  if (input!=null) {
+  if (input != null) {
     return _getUnvisit(entities)(input, schema);
   }
 }
 
 _unvisitEntity(id, schema, unvisit, getEntity, cache) {
   var entity = getEntity(id, schema);
-  if (((!isObject(entity))) || entity == null || entity is int) {///todo CHECK
+  if (((!isObject(entity))) || entity == null || entity is int) {
+    ///todo CHECK
     return entity;
   }
 
@@ -81,9 +81,8 @@ _getUnvisit(entities) {
   final cache = {};
   final getEntity = _getEntities(entities);
 
-  unvisit( input, schema) {
+  unvisit(input, schema) {
     if (isObject(schema)) {
-
       final method = schema is Iterable ? ArrayUtils.denormalize : ObjectUtils
           .denormalize1;
       return method(schema, input, unvisit);
@@ -94,12 +93,11 @@ _getUnvisit(entities) {
     if (schema is EntitySchema) {
       return _unvisitEntity(input, schema, unvisit, getEntity, cache);
     }
+    print(schema);
     return schema.denormalize(input, unvisit);
   }
-
-  return  (input, schema) => unvisit(input, schema);
+  return (input, schema) => unvisit(input, schema);
 }
-
 
 _getEntities(entities) {
   return (entityOrId, schema) {

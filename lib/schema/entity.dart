@@ -3,7 +3,7 @@ import 'package:dart_normalizer/schema/schema.dart';
 import 'package:dart_normalizer/schema/utils.dart';
 
 
-class EntitySchema extends Schema{
+class EntitySchema extends Schema {
   String key;
   var idAttribute = 'id';
   var _getId;
@@ -15,12 +15,14 @@ class EntitySchema extends Schema{
   var getDefaultGetId = (idAttribute) =>
       (input, paremt, key) => input[idAttribute];
 
-  EntitySchema(this.key, {definition, options, idAttribute, processStrategy, mergeStrategy}) {
+  EntitySchema(this.key,
+      {definition, options, idAttribute, processStrategy, mergeStrategy}) {
     if (key == null) {
       throw new Exception();
     }
-    print((input,parent, key) => input);
-    _processStrategy= processStrategy!= null ? processStrategy : (input,parent, key) => input;
+    print((input, parent, key) => input);
+    _processStrategy =
+    processStrategy != null ? processStrategy : (input, parent, key) => input;
     if (idAttribute == null) {
       // this.idAttribute = "id";
       this._getId = getDefaultGetId("id");
@@ -30,7 +32,8 @@ class EntitySchema extends Schema{
           ? getDefaultGetId(idAttribute)
           : idAttribute;
     }
-    _mergeStrategy = (mergeStrategy != null) ? mergeStrategy :( entityA, entityB) =>entityA..addAll(entityB);
+    _mergeStrategy = (mergeStrategy != null) ? mergeStrategy : (entityA,
+        entityB) => entityA..addAll(entityB);
     this.define(definition);
   }
 
@@ -57,7 +60,8 @@ class EntitySchema extends Schema{
     (this.schema.keys).forEach((key) {
       if (processedEntity.containsKey(key) && isObject(processedEntity[key])) {
         final schema = this.schema[key];
-        map[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
+        map[key] = visit(
+            processedEntity[key], processedEntity, key, schema, addEntity);
       }
     });
     addEntity(this, map, input, parent, key);
@@ -71,11 +75,12 @@ class EntitySchema extends Schema{
   denormalize(Map entity, unvisit) {
     this.schema.keys.forEach((key) {
       if (entity.containsKey((key))) {
-      var schema = this.schema[key];
-      entity[key] = unvisit(entity[key], schema);
+        var schema = this.schema[key];
+        entity[key] = unvisit(entity[key], schema);
       }
-      });
-    return entity.map((key, value) => MapEntry(key, unvisit(entity[key],schema)));
+    });
+    return entity.map((key, value) =>
+        MapEntry(key, unvisit(entity[key], schema)));
   }
 
 }

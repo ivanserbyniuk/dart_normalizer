@@ -9,24 +9,22 @@ normalize1(schema, input, parent, key, visit, addEntity) {
   object.addAll(input);
   (schema.keys).forEach((key) {
     var localSchema = schema[key];
-     if(input[key]!= null) { //todo #hack need to check
-    var value = visit(input[key], input, key, localSchema, addEntity);
-    if (value == null) {
-      object.remove(key);
-    } else {
-      object[key] = value;
+    if (input[key] != null) {
+      var value = visit(input[key], input, key, localSchema, addEntity);
+      if (value == null) {
+        object.remove(key);
+      } else {
+        object[key] = value;
+      }
     }
-     }
   });
   return object;
 }
 
 denormalize1(schema, input, unvisit) {
-  if (!isObject(input)){
+  if (!isObject(input)) {
     return input;
-
   }
- // return denormalizeImmutable(schema, input, unvisit);
   Map object = {};
   object.addAll(input);
   (schema.keys).forEach((key) {
@@ -47,10 +45,7 @@ class ObjectSchema extends Schema {
   define(Map definition) {
     if (definition != null) {
       this.schema.addAll({});
-      this.schema.addAll(definition);/*.map((key, value) {
-        final schema = definition[key];
-        return MapEntry(key, schema);
-      });*/
+      this.schema.addAll(definition);
     }
     if (schema == null) {
       this.schema = {};
@@ -62,7 +57,7 @@ class ObjectSchema extends Schema {
     return normalize1(this.schema, input, parent, key, visit, addEntity);
   }
 
-  denormalize( input, unvisit){
+  denormalize(input, unvisit) {
     return denormalize1(schema, input, unvisit);
   }
 
