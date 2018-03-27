@@ -128,7 +128,6 @@ unvisitEntity(id, schema, unvisit, getEntity, cache) {
   if (cache[schema.key] == null) {
     cache[schema.key] = {};
   }
-  print("entity $entity");
   if (cache[schema.key] [id] == null) {
 // Ensure we don't mutate it non-immutable objects
 
@@ -140,7 +139,6 @@ unvisitEntity(id, schema, unvisit, getEntity, cache) {
     cache[schema.key][id] = entityCopy;
 
     var denormalize = schema.denormalize(entityCopy, unvisit);
-    print("denormalize $denormalize");
     cache[schema.key][id] = denormalize;
   }
 
