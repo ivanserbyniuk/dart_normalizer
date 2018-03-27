@@ -260,7 +260,7 @@ void main() {
 
     var guestSchema = new EntitySchema(
         'guests',
-        idAttribute: (value, parent, key) => "${key}-${parent.id}-${value
+        idAttributeFunc: (value, parent, key) => "${key}-${parent.id}-${value
             .guest_id}");
 
     var patronsSchema = new EntitySchema('patrons', definition: {

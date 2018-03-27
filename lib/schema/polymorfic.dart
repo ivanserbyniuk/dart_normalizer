@@ -5,11 +5,14 @@ class PolymorphicSchema extends Schema {
   dynamic _schemaAttribute;
   dynamic schema;
 
-  PolymorphicSchema(definition, schemaAttribute) {
-    if (schemaAttribute != null) {
-      this._schemaAttribute = schemaAttribute is String
-          ? (input, p1, p2) => input[schemaAttribute]
-          : schemaAttribute;
+  PolymorphicSchema(definition, String schemaAttribute, schemaAttributeFunc(input, parrent, key)) {
+      if (schemaAttributeFunc != null && schemaAttribute == null) {
+      this._schemaAttribute = schemaAttributeFunc;
+    }
+    else if (schemaAttributeFunc == null && schemaAttribute != null) {
+      this._schemaAttribute = (input, p1, p2) => input[schemaAttribute];
+    } else if (schemaAttribute != null && schemaAttributeFunc != null) {
+      throw new Exception("You must use idAttribute or idAttibuteTitle");
     }
     this.define(definition);
   }

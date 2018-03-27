@@ -1,6 +1,5 @@
 import 'package:dart_normalizer/schema/polymorfic.dart';
 
-
 var validateSchema = (definition) => definition[0];
 
 getValues(input) => (input is List) ? input : input.values;
@@ -20,10 +19,9 @@ denormalize(schema, input, unvisit) {
       unvisit(entityOrId, schema)) : input;
 }
 
-
 class ArraySchema extends PolymorphicSchema {
-  ArraySchema(definition, {schemaAttribute})
-      : super(definition, schemaAttribute);
+  ArraySchema(definition, {String schemaAttribute, dynamic schemaAttributeFunc(input, parent, key)})
+      : super(definition, schemaAttribute, schemaAttributeFunc);
 
   normalize(input, parent, key, visit, addEntity) {
     final values = getValues(input);

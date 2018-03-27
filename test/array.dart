@@ -97,13 +97,13 @@ void main() {
   //=========================
 
   test('normalizes multiple entities', () { //todo check order
-    var inferSchemaFn = ((input, parent, key) => input["type"]);
+    var inferSchemaFunc = ((input, parent, key) => input["type"]);
     var catSchema = new EntitySchema('cats');
     var peopleSchema = new EntitySchema('person');
     var listSchema = new ArraySchema({
       "cats": catSchema,
       "people": peopleSchema
-    }, schemaAttribute: inferSchemaFn);
+    }, schemaAttributeFunc: inferSchemaFunc);
 
     var expectedJson = """ {
   "entities": {
@@ -297,7 +297,7 @@ void main() {
       "cats": catSchema,
       "dogs": {},
       "people": peopleSchema
-    }, schemaAttribute: (input, parent, key) =>
+    }, schemaAttributeFunc: (input, parent, key) =>
     input["type"] != null
         ? input["type"]
         : 'dogs');

@@ -6,7 +6,6 @@ import 'package:dart_normalizer/schema/object.dart';
 import 'package:dart_normalizer/schema/value.dart';
 import 'package:test/test.dart';
 
-
 void main() {
   test('key getter should return key passed to constructor', () {
     var user = new EntitySchema('users');
@@ -82,9 +81,9 @@ void main() {
   }
 }""";
     var user = new EntitySchema(
-        'users', idAttribute: (entity, parent, key) => key);
+        'users', idAttributeFunc: (entity, parent, key) => key);
     var inputSchema = new Values(
-        { "users": user}, schemaAttribute: (input, parent, key) => 'users');
+        { "users": user}, schemaAttributeFunc: (input, parent, key) => 'users');
 
     var input = { '4': { "name": 'taco'}, '56': { "name": 'burrito'}};
     expect(normalize(input, inputSchema), fromJson(expectedJson));
@@ -109,7 +108,7 @@ void main() {
     }
 }""";
     var user = new EntitySchema('users',
-        idAttribute: (entity, parent,
+        idAttributeFunc: (entity, parent,
             key) => "${parent['name']}-${key}-${entity['id']}"
     );
     var inputSchema = new ObjectSchema({"user": user});

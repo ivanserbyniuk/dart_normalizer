@@ -11,26 +11,31 @@ class EntitySchema extends Schema {
   var _processStrategy;
   var schema;
 
-
   var getDefaultGetId = (idAttribute) =>
       (input, paremt, key) => input[idAttribute];
 
   EntitySchema(this.key,
-      {definition, options, idAttribute, processStrategy, mergeStrategy}) {
+      {definition, String idAttribute, idAttributeFunc(input, parent,
+          key), processStrategy(input, parent, key), mergeStrategy(entityA,
+          entityB)}) {
     if (key == null) {
       throw new Exception();
     }
     _processStrategy =
     processStrategy != null ? processStrategy : (input, parent, key) => input;
-    if (idAttribute == null) {
-      // this.idAttribute = "id";
+    if (idAttributeFunc == null && idAttribute == null) {
       this._getId = getDefaultGetId("id");
     }
-    else {
-      this._getId = idAttribute is String
-          ? getDefaultGetId(idAttribute)
-          : idAttribute;
+    else if (idAttributeFunc != null && idAttribute == null) {
+      this._getId = idAttributeFunc;
     }
+    else if (idAttributeFunc == null && idAttribute != null) {
+      this._getId = getDefaultGetId(idAttribute);
+    } else if (idAttribute != null && idAttributeFunc != null) {
+      throw new Exception("You must use idAttribute or idAttibuteTitle");
+    }
+
+
     _mergeStrategy = (mergeStrategy != null) ? mergeStrategy : (entityA,
         entityB) => entityA..addAll(entityB);
     this.define(definition);

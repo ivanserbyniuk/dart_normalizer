@@ -37,14 +37,14 @@ void main() {
   }
 }
         """;
-    var inferSchemaFn = ((input, parent, key) => input["type"]);
+    var inferSchemaFunc = ((input, parent, key) => input["type"]);
 
     var cat = new EntitySchema('cats');
     var dog = new EntitySchema('dogs');
     var valuesSchema = new Values({
       "dogs": dog,
       "cats": cat
-    }, schemaAttribute: inferSchemaFn);
+    }, schemaAttributeFunc: inferSchemaFunc);
 
 
     Map<String, dynamic> test = {
@@ -93,7 +93,7 @@ void main() {
     var valuesSchema = new Values({
       "dogs": dog,
       "cats": cat
-    }, schemaAttribute: (entity, parrent, key) => '${entity["type"]}s');
+    }, schemaAttributeFunc: (entity, parrent, key) => '${entity["type"]}s');
 
     var test = {
       "fido": { "id": 1, "type": 'dog'},
@@ -128,7 +128,7 @@ void main() {
     var valuesSchema = new Values({
       "dogs": dog,
       "cats": cat
-    }, schemaAttribute: (Map input, parrent, key) => input["type"]);
+    }, schemaAttributeFunc: (input, parrent, key) => input["type"]);
     var test = {
       "fido": null,
       "milo": null,
@@ -156,7 +156,7 @@ void main() {
     var valuesSchema = new Values({
       "dogs": dog,
       "cats": cat
-    }, schemaAttribute: (entity, parrent, key) => entity.type);
+    }, schemaAttributeFunc: (entity, parrent, key) => entity.type);
 
     var entities = {
       "cats": { 1: { "id": 1, "type": 'cats'}},

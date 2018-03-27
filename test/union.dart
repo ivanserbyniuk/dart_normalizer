@@ -45,7 +45,7 @@ void main() {
     var union = new UnionSchema({
       "users": user,
       "groups": group
-    }, 'type');
+    }, schemaAttribute: 'type');
 
     var userTest = N.normalize({ "id": 1, "type": 'users'}, union);
     var groupsTest = N.normalize({ "id": 2, "type": 'groups'}, union);
@@ -105,7 +105,7 @@ void main() {
     var union = new UnionSchema({
       "users": user,
       "groups": group
-    }, (Map input, parrent, key) =>
+    },schemaAttributeFunc: (input, parrent, key) =>
     input.containsKey("username") ? 'users' : input.containsKey("groupname")
         ? 'groups'
         : null);
@@ -153,7 +153,7 @@ void main() {
     var union = new UnionSchema({
       "users": user,
       "groups": group
-    }, 'type');
+    }, schemaAttribute: 'type');
 
     var testJson1 = { "id": 1, "schema": "users"};
     expect(N.denormalize(testJson1, union, entities), fromJson(expectedJson1));
