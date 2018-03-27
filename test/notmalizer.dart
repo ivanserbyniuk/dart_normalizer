@@ -228,4 +228,44 @@ void main() {
   expect(denormalize('123', article, entities),fromJson(expectedJson));
 });
 
+
+
+
+  test('denormalizes with function as idAttribute', () {
+    var expectedJson = """
+     [
+       {
+      "guest": null,
+      "id": "1",
+      "name": "Esther"
+    },
+       {
+    "guest": {
+    "guest_id": 1
+    },
+    "id": "2",
+    "name": "Tom"
+    }
+    ]""";
+      const normalizedData = {
+      "entities": {
+      "patrons": {
+      '1': { "id": '1', "guest": null, "name": 'Esther' },
+      '2': { "id": '2', "guest": 'guest-2-1', "name": 'Tom' }
+      },
+      "guests": { 'guest-2-1': { "guest_id": 1 } }
+      },
+      "result": ['1', '2']
+      };
+
+      var guestSchema = new EntitySchema(
+      'guests',
+        idAttribute: (value, parent, key) => "${key}-${parent.id}-${value.guest_id}");
+
+  var patronsSchema = new EntitySchema('patrons', definition: {
+    "guest": guestSchema
+  });
+
+  expect(denormalize(normalizedData["result"], [patronsSchema], normalizedData["entities"]), fromJson(expectedJson));
+});
 }
