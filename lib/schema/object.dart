@@ -1,6 +1,7 @@
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/immutable_utils.dart';
 import 'package:dart_normalizer/schema/schema.dart';
+import 'package:dart_normalizer/schema/utils.dart';
 
 
 normalize1(schema, input, parent, key, visit, addEntity) {
@@ -21,8 +22,13 @@ normalize1(schema, input, parent, key, visit, addEntity) {
 }
 
 denormalize1(schema, input, unvisit) {
+  print("input $input");
+  if (!isObject(input)){
+    return input;
+
+  }
  // return denormalizeImmutable(schema, input, unvisit);
-  print("denorm obj");
+  print("denorm $input");
   Map object = {};
   object.addAll(input);
   (schema.keys).forEach((key) {

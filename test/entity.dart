@@ -283,61 +283,7 @@ void main() {
 
     expect(denormalize(1, menuSchema, entities), fromJson(expectedJson1));
     expect(denormalize(2, menuSchema, entities), fromJson(expectedJson2));
-  })
-/*
-/*  test('is run before and passed to the schema normalization', () {
-    var expectedJson = """
-    {
-  "entities": {
-    "attachments": {
-      "456": {
-        "id": "456"
-      }
-    },
-    "entries": {
-      "123": {
-        "data": {
-          "attachment": "456"
-        },
-        "id": "123",
-        "type": "message"
-      }
-    }
-  },
-  "result": "123"
-}""";
-
-
-
-  test('denormalizes deep entities', () {
-    var expectedJson1 = """ {
-    "food": {
-      "id": 1
-   },
-  " id": 1
-  }""";
-
-    var expectedJson2 = """  {
-      "id": 2
-    }""";
-    var foodSchema = new EntitySchema('foods');
-    var menuSchema = new EntitySchema('menus', definition: {
-      "food": foodSchema
-    });
-
-    const entities = {
-      "menus": {
-        1: { "id": 1, "food": 1},
-        2: { "id": 2}
-      },
-      "foods": {
-        1: { "id": 1}
-      }
-    };
-
-    expect(denormalize(1, menuSchema, entities), expectedJson1);
-    expect(denormalize(2, menuSchema, entities), expectedJson2);
-  })*/  */;
+  });
 }
 
 

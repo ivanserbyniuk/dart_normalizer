@@ -7,8 +7,6 @@ import 'package:dart_normalizer/schema/schema.dart';
 import 'package:dart_normalizer/schema/utils.dart';
 
 
-
-
 normalize(input, schema) {
   Map entities = {};
   var addEntity = addEntities(entities);
@@ -17,11 +15,12 @@ normalize(input, schema) {
 }
 
 
-visit( value,  parent, key,  schema, addEntity) {
-if( value == null || (value is Map && isUndefined(value))||(!isObject(value) ) && !isSchema(value)) {
-  return (value is Map)&& isUndefined(value) ? null :value;
-}
-  if (schema is List || (!isSchema(schema)) ) {
+visit(value, parent, key, schema, addEntity) {
+  if (value == null || (value is Map && isUndefined(value)) ||
+      (!isObject(value)) && !isSchema(value)) {
+    return (value is Map) && isUndefined(value) ? null : value;
+  }
+  if (schema is List || (!isSchema(schema))) {
     var method = schema is List ? ArrayUtils.normalize : ObjectUtils.normalize1;
     return method(schema, value, parent, key, visit, addEntity);
   }
@@ -44,9 +43,9 @@ addEntities(entities) =>
       } else {
         entities[schemaKey][id] = processedEntity;
       }
-        };
+    };
 
-
+/*
 unvisitEntity(id, schema, unvisit, getEntity, Map cache) {
   var entity = getEntity(id, schema);
   if (entity == null || isObject(entity)) {
@@ -115,6 +114,80 @@ getUnvisit(entities)  {
  denormalize (input, schema, entities)  {
 if (input !=null) {
 return getUnvisit(entities)(input, schema);
-}
+}*/
 //else {return {};}
+
+
+
+unvisitEntity(id, schema, unvisit, getEntity, cache) {
+  var entity = getEntity(id, schema);
+  if (((!isObject(entity))) || entity == null || entity is int) {///todo CHECK
+    return entity;
+  }
+
+  if (cache[schema.key] == null) {
+    cache[schema.key] = {};
+  }
+  print("entity $entity");
+  if (cache[schema.key] [id] == null) {
+// Ensure we don't mutate it non-immutable objects
+
+    final entityCopy = {};
+    entityCopy.addAll(entity);
+
+// Need to set this first so that if it is referenced further within the
+// denormalization the reference will already exist.
+    cache[schema.key][id] = entityCopy;
+
+    var denormalize = schema.denormalize(entityCopy, unvisit);
+    print("denormalize $denormalize");
+    cache[schema.key][id] = denormalize;
+  }
+
+  return cache[schema.key][id];
 }
+
+
+getUnvisit(entities) {
+  final cache = {};
+  final getEntity = getEntities(entities);
+
+  unvisit( input, schema) {
+    if (isObject(schema)) {
+
+      final method = schema is Iterable ? ArrayUtils.denormalize : ObjectUtils
+          .denormalize1;
+      return method(schema, input, unvisit);
+    }
+    if (input == null) {
+      return input;
+    }
+    if (schema is EntitySchema) {
+      return unvisitEntity(input, schema, unvisit, getEntity, cache);
+    }
+    print(schema);
+    return schema.denormalize(input, unvisit);
+  }
+
+  return  (input, schema) => unvisit(input, schema);
+}
+
+
+getEntities(entities) {
+  return (entityOrId, schema) {
+    var schemaKey = schema.key;
+
+    if (isObject(entityOrId)) {
+      return entityOrId;
+    }
+
+    return entities[schemaKey][entityOrId];
+  };
+}
+
+denormalize(input, schema, entities) {
+  if (input!=null) {
+    return getUnvisit(entities)(input, schema);
+  }
+}
+
