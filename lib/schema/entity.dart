@@ -20,7 +20,6 @@ class EntitySchema extends Schema {
     if (key == null) {
       throw new Exception();
     }
-    print((input, parent, key) => input);
     _processStrategy =
     processStrategy != null ? processStrategy : (input, parent, key) => input;
     if (idAttribute == null) {

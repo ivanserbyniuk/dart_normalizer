@@ -93,7 +93,6 @@ _getUnvisit(entities) {
     if (schema is EntitySchema) {
       return _unvisitEntity(input, schema, unvisit, getEntity, cache);
     }
-    print(schema);
     return schema.denormalize(input, unvisit);
   }
   return (input, schema) => unvisit(input, schema);

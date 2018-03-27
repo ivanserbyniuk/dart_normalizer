@@ -67,7 +67,6 @@ class PolymorphicSchema extends Schema {
     else {
       id = value["id"];
     }
-    print(value);
     var schema = isSingleSchema() ? this.schema : this.schema[schemaKey];
     var key = id == null ? value : id;
     return unvisit(key, schema);
