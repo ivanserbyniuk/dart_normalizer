@@ -12,20 +12,12 @@ class  Values extends PolymorphicSchema {
       }
     });
     object.addAll(object.map((key, value)=> MapEntry(key, normalizeValue(value, input, key, visit, addEntity)) ));
-
     return object;
 
   }
 
   denormalize( input, unvisit) {
     return input.map((key, value) => MapEntry(key, denormalizeValue(value, unvisit)));
-    return (input.keys).reduce((output, key)  {
-        var entityOrId = input[key];
-        return {
-        output:denormalizeValue(entityOrId, unvisit),
-        key: denormalizeValue(entityOrId, unvisit)
-        };
-    });
   }
 }
 

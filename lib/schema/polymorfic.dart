@@ -11,7 +11,6 @@ class PolymorphicSchema extends Schema{
           ? (input,p1,p2) => input[schemaAttribute]
           : schemaAttribute;
     }
-
     this.define(definition);
   }
 
@@ -32,10 +31,8 @@ class PolymorphicSchema extends Schema{
 
   inferSchema(input, parent, key) {
  if (isSingleSchema()) {
-   print("return schema");
    return schema;
  }
- print("attr schemap");
     var attr = getSchemaAttribute(input, parent, key);
     return this.schema[attr];
   }
@@ -44,7 +41,6 @@ class PolymorphicSchema extends Schema{
     if(value == null) {
       return null;
     }
-   print("normValue $value");
     final schema = inferSchema(value, parent, key);
     if (schema == null) {
       return value;
@@ -60,7 +56,6 @@ class PolymorphicSchema extends Schema{
 
 
   denormalizeValue(value, unvisit) {
-    print("polimorfic");
     var schemaKey =  value is Map ?value["schema"]: null;
     if (!isSingleSchema() && schemaKey==null) {
       return value;

@@ -53,6 +53,7 @@ void main() {
     expect(groupsTest, fromJson(expectedJson2));
   });
 
+  //======================
 
   test(
       'normalizes an array of multiple entities using a function to infer the schemaAttribute', () {
@@ -118,7 +119,7 @@ void main() {
   });
 
 
-//Denormalization
+  //=================== Denormalization
 
   var user = new EntitySchema('users');
   var group = new EntitySchema('groups');
@@ -130,6 +131,8 @@ void main() {
       2: { "id": 2, "groupname": 'People', "type": 'groups' }
     }
   };
+
+  //===================
 
   test('denormalizes an object using string schemaAttribute', () {
     var expectedJson1 = """ {

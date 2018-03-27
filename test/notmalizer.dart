@@ -1,12 +1,7 @@
-import 'package:dart_normalizer/Pair.dart';
 import 'package:dart_normalizer/normolizer.dart';
 import 'package:dart_normalizer/schema/entity.dart';
-import 'package:dart_normalizer/schema/object.dart';
-import 'package:dart_normalizer/schema/value.dart';
 import 'package:test/test.dart';
-
 import 'entity.dart';
-
 
 void main() {
   test('normalizes entities', () {
@@ -29,13 +24,13 @@ void main() {
   ]
 }""";
     var mySchema = new EntitySchema('tacos');
-
     var input = [{ "id": 1, "type": 'foo'}, { "id": 2, "type": 'bar'}];
     expect(normalize(input, [mySchema]), fromJson(expectedJson));
   });
 
-  test('normalizes nested entities', () {
+  //=====================
 
+  test('normalizes nested entities', () {
     var expectedJson = """ {
   "entities": {
     "articles": {
@@ -99,7 +94,9 @@ void main() {
     };
     expect(normalize(input, article), fromJson(expectedJson));
   });
-  
+
+  //================
+
   test('ignores null values', (){
     var expectedJson = """ {
   "entities": {},
@@ -107,7 +104,6 @@ void main() {
    null
   ]
 }""";
-
 
    var expectedJson2 = """ {
       "entities": {},
@@ -121,6 +117,7 @@ void main() {
      expect(normalize([false], [myEntity]),fromJson(expectedJson2));
   });
 
+  //==================
 
   test('passes over pre-normalized values', () {
     var expectedJson = """ {
@@ -141,6 +138,8 @@ void main() {
   var input = { "id": '123', "title": 'normalizr is great!', "author": 1 };
   expect(normalize(input, articleEntity),fromJson(expectedJson));
 });
+
+  //=====================
 
   test('denormalizes entities', () {
     var expectedJson = """ 
@@ -165,8 +164,9 @@ void main() {
   expect(denormalize(input, [mySchema], entities),fromJson(expectedJson));
 });
 
-  test('denormalizes nested entities', () {
+  //======================
 
+  test('denormalizes nested entities', () {
     var expectedJson =""" 
      {
   "author":  {
@@ -228,8 +228,7 @@ void main() {
   expect(denormalize('123', article, entities),fromJson(expectedJson));
 });
 
-
-
+  //=============================
 
   test('denormalizes with function as idAttribute', () {
     var expectedJson = """

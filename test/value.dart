@@ -54,6 +54,7 @@ void main() {
     expect(N.normalize(test, valuesSchema), fromJson(expectedJson));
   });
 
+  //====================
 
   test('can use a function to determine the schema when normalizing', () {
     var exctedJson = """
@@ -102,6 +103,7 @@ void main() {
     expect(N.normalize(test, valuesSchema), fromJson(exctedJson));
   });
 
+  //=====================
 
   test('filters out null and undefined values', () {
     var expectedJson = """
@@ -135,7 +137,8 @@ void main() {
     expect(N.normalize(test, valuesSchema), fromJson(expectedJson));
   });
 
-  ///denormalize
+  //================= denormalize
+
   test('denormalizes the values of an object with the given schema', () {
     var expectedJson = """
     {

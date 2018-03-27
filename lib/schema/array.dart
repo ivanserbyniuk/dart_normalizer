@@ -27,13 +27,10 @@ class ArraySchema extends PolymorphicSchema {
     var list = values
         .map((value) => this.normalizeValue(value, parent, key, visit, addEntity))
         .where((value) => value !=null).toList();
-    print("list $list");
     return list;
   }
 
   denormalize(input, unvisit) {
-    print("array");
-
     return input !=null && input is Iterable ? input.map((value) => this.denormalizeValue(value, unvisit)) : input;
   }
 }

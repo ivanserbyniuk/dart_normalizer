@@ -24,6 +24,8 @@ void main() {
 }
     """;
 
+  //=======================
+
   test("normalizes an object", () {
     var userSchema = new EntitySchema('user');
     var schema = new ObjectSchema({
@@ -33,6 +35,7 @@ void main() {
     expect(N.normalize(test, schema), fromJson(expectedJson));
   });
 
+  //=====================
 
   test("normalizes plain objects as shorthand for ObjectSchema ", () {
     var userSchema = new EntitySchema('user');
@@ -40,6 +43,7 @@ void main() {
         fromJson(expectedJson));
   });
 
+  //======================
 
   test('filters out undefined and null values', () {
     var expectedJson = """{
@@ -58,6 +62,8 @@ void main() {
     var users = { "foo": userSchema, "bar": userSchema, "baz": userSchema};
     expect(N.normalize({ "bar": { "id": '1'}}, users), fromJson(expectedJson));
   });
+
+  //========================
 
   test('denormalizes an object', () {
     var expectedJson = """

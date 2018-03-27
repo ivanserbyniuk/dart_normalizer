@@ -14,6 +14,8 @@ void main() {
     expect(user.key, 'users');
   });
 
+  //===============
+
   test("normalizes an entity", () {
     var item = new EntitySchema("item");
     var expectedJson = """
@@ -31,6 +33,8 @@ void main() {
     var afterNormalizetion = normalize({ "id": 1}, item);
     expect(afterNormalizetion, fromJson(expectedJson));
   });
+
+  //=================
 
   test("test custome id attribute string", () {
     var expectedJson = """ 
@@ -50,6 +54,8 @@ void main() {
     var json = normalize({ "id_str": '134351', "name": 'Kathy'}, item);
     expect(json, fromJson(expectedJson));
   });
+
+  //===================
 
   test('can normalize entity IDs based on their object key', () {
     //todo int string key check
@@ -85,22 +91,23 @@ void main() {
     expect(normalize(input, inputSchema), fromJson(expectedJson));
   });
 
+//======================
 
   test('can build the entitys ID from the parent object', () {
     var expectedJson = """ 
     {
-  "entities": {
-    "users": {
-      "tacos-user-4": {
-        "id": "4",
-        "name": "Jimmy"
+    "entities": {
+      "users": {
+        "tacos-user-4": {
+          "id": "4",
+          "name": "Jimmy"
+        }
       }
+    },
+    "result": {
+      "name": "tacos",
+      "user": "tacos-user-4"
     }
-  },
-  "result": {
-    "name": "tacos",
-    "user": "tacos-user-4"
-  }
 }""";
     var user = new EntitySchema('users',
         idAttribute: (entity, parent,
@@ -112,10 +119,7 @@ void main() {
     expect(normalize(input, inputSchema), fromJson(expectedJson));
   });
 
-  //merge strategy, proccess strategy
-
-
-  // denormalizetion
+  //=============proccess strategy
 
   test('can use a custom processing strategy', () {
     var expectedJSON = """ {
@@ -141,6 +145,8 @@ void main() {
     var input = { "id": 1, "name": 'foo'};
     expect(normalize(input, mySchema), fromJson(expectedJSON));
   });
+
+  //======================
 
   test('can use information from the parent in the process strategy', () {
     var expectedJson = """ 
@@ -183,7 +189,8 @@ void main() {
   });
 
 
-//merge strategy
+//===================== merge strategy
+
   test('defaults to plain merging', () {
     var expectedJson = """
       {
@@ -209,6 +216,8 @@ void main() {
     ];
     expect(normalize(input, [ mySchema]), fromJson(expectedJson));
   });
+
+  //===============================
 
   test('can use a custom merging strategy', () {
     var expectedJson = """ 
@@ -239,7 +248,7 @@ void main() {
     expect(normalize(input, [ mySchema]), fromJson(expectedJson));
   });
 
-  //Denormalization
+  //===================== Denormalization
 
   test('denormalizes an entity', () {
     var expectedJson = """ {
@@ -254,6 +263,8 @@ void main() {
     };
     expect(denormalize(1, mySchema, entities), fromJson(expectedJson));
   });
+
+  //==========================
 
   test('denormalizes deep entities', () {
     var expectedJson1 = """ {

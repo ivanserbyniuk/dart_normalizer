@@ -13,6 +13,8 @@ void main() {
     expect(user.key, 'users');
   });
 
+  //=================
+
   test("normalizes an entity", () {
     var userSchema = new EntitySchema("user");
     var expectedJson = """
@@ -38,6 +40,7 @@ void main() {
     expect(N.normalize(test, [userSchema]), fromJson(expectedJson));
   });
 
+  //===================
 
   test('normalizes Objects using their values', () {
     var userSchema = new EntitySchema('user');
@@ -59,13 +62,13 @@ void main() {
   ]
 }
       """;
-    var test = {
+    var input = {
       "foo": { "id": 1}, "bar": { "id": 2}
     };
-
-    expect(N.normalize(test, [userSchema]), fromJson(expectedJson));
+    expect(N.normalize(input, [userSchema]), fromJson(expectedJson));
   });
 
+  //========================
 
   test('normalizes a single entity', () {
     var expectedJson = """
@@ -91,6 +94,7 @@ void main() {
     expect(N.normalize(test, listSchema), fromJson(expectedJson));
   });
 
+  //=========================
 
   test('normalizes multiple entities', () { //todo check order
     var inferSchemaFn = ((input, parent, key) => input["type"]);
@@ -148,6 +152,8 @@ void main() {
     expect(N.normalize(test, listSchema), fromJson(expectedJson));
   });
 
+  //===========================
+
   test('normalizes Objects using their values', () {
     var expectedJson = """ {
   "entities": {
@@ -171,6 +177,7 @@ void main() {
     expect(N.normalize(test, users), fromJson(expectedJson));
   });
 
+  //===========================
 
   test('filters out undefined and null normalized values', () {
     var expectedJson = """ {
@@ -192,6 +199,7 @@ void main() {
         fromJson(expectedJson));
   });
 
+  //===========================
 
   test('denormalizes a single entity', () {
     var expectedJson = """
@@ -216,6 +224,8 @@ void main() {
     expect(N.denormalize([ 1, 2], [ cats], entities), fromJson(expectedJson));
   });
 
+  //=========================
+
   test('returns the input value if is not an array', () {
     var expectedJson = """ {
   "fillings": {},
@@ -235,6 +245,8 @@ void main() {
 
     expect(N.denormalize('123', taco, entities1), fromJson(expectedJson));
   });
+
+  //======================
 
   test('denormalizes a single entity', ()  {
     var expectedJson = """ [
@@ -259,6 +271,8 @@ void main() {
   expect(N.denormalize([ 1, 2 ], catList, entities), fromJson(expectedJson));
 });
 
+  //=========================
+
   test('denormalizes multiple entities', (){
     var expectedJson = """ [
      {
@@ -268,23 +282,22 @@ void main() {
      {
         "id": "123",
         "type": "people"
-    },
+      },
      {
          "id": "789"
-    },
+      },
      {
         "id": "456",
         "type": "cats"
-  }
+    }
 ]""";
-
     var catSchema = new EntitySchema('cats');
-  var peopleSchema = new EntitySchema('person');
-  var listSchema = new ArraySchema({
-    "cats": catSchema,
-    "dogs": {},
-    "people": peopleSchema
-  }, schemaAttribute:(input, parent, key) => input["type"]!= null ? input["type"] : 'dogs');
+    var peopleSchema = new EntitySchema('person');
+    var listSchema = new ArraySchema({
+      "cats": catSchema,
+      "dogs": {},
+      "people": peopleSchema
+    }, schemaAttribute:(input, parent, key) => input["type"]!= null ? input["type"] : 'dogs');
 
     const entities = {
     "cats": {
@@ -314,7 +327,6 @@ void main() {
 
   expect(N.denormalize(input, listSchema, entities), fromJson(expectedJson));
 });
-
 }
 
 
