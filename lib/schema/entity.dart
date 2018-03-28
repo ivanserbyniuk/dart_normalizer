@@ -3,7 +3,7 @@ import 'package:dart_normalizer/schema/schema.dart';
 import 'package:dart_normalizer/schema/utils.dart';
 
 
-class EntitySchema extends Schema {
+class EntitySchema extends BaseSchema {
   String key;
   var idAttribute = 'id';
   var _getId;

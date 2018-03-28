@@ -35,7 +35,7 @@ denormalize1(schema, input, unvisit) {
   return object;
 }
 
-class ObjectSchema extends Schema {
+class ObjectSchema extends BaseSchema {
   Map schema = {};
 
   ObjectSchema(definition) {

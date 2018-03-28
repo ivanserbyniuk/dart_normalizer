@@ -1,8 +1,8 @@
 name: dart_normalizer
-description: Dart port of normalizr library
-version: 0.0.1
-author:
-homepage:
+description: Dart port of normalizr library https://github.com/paularmstrong/normalizr
+version: 0.9.1
+author: Ivan Serbyniuk
+homepage: https://github.com/ivanserbyniuk/dart_normalizer
 
 dependencies:
   flutter:
