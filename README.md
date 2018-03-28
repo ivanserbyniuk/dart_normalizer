@@ -39,12 +39,12 @@ import 'package:dart_normalizer/schema/entity.dart';
 final user = new EntitySchema('users');
 
 // Define your comments schema
-final comment = new schema.Entity('comments', {
+final comment = new EntitySchema('comments', {
   'commenter': user
 });
 
 // Define your article 
-final article = new schema.Entity('articles', { 
+final article = new EntitySchema('articles', { 
   'author': user,
   'comments': [ comment ]
 });
