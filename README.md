@@ -33,7 +33,7 @@ We have two nested entity types within our `article`: `users` and `comments`. Us
 ```js
 import 'dart:convert';
 import 'package:dart_normalizer/normolizer.dart';
-import 'package:dart_normalizer/schema/entity.dart';
+import 'package:dart_normalizer/schema/entity_test.dart';
 
 // Define a users schema
 final user = new EntitySchema('users');
@@ -43,14 +43,14 @@ final comment = new EntitySchema('comments', {
   'commenter': user
 });
 
-// Define your article 
-final article = new EntitySchema('articles', { 
+// Define your article
+final article = new EntitySchema('articles', {
   'author': user,
   'comments': [ comment ]
 });
 
 // convert json string to Map
-var inputMap = JSON.decode(jsonString)
+var inputMap = json.decode(jsonString)
 Map normalizedData = normalize(originalData, article);
 ```
 
@@ -60,8 +60,8 @@ Now, `normalizedData` will be:
 {
   result: "123",
   entities: {
-    "articles": { 
-      "123": { 
+    "articles": {
+      "123": {
         id: "123",
         author: "1",
         title: "My awesome blog post",

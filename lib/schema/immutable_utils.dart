@@ -2,7 +2,6 @@ bool isImmutable(Map<dynamic, dynamic> object) {
   return object.containsKey("_ownerID");
 }
 
-
 Map<dynamic, dynamic> denormalizeImmutable(Map schema, Map input, unvisit) {
   Map toReduce(object, key) {
     String keyString = key.toString();
@@ -11,10 +10,9 @@ Map<dynamic, dynamic> denormalizeImmutable(Map schema, Map input, unvisit) {
       object.putIfAbsent(
           keyString, unvisit(object[keyString], schema[keyString]));
       return object;
-    }
-    else
+    } else
       return object;
   }
+
   return schema.keys.reduce(toReduce);
 }
-

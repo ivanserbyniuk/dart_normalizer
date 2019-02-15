@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:dart_normalizer/normolizer.dart' as N;
 import 'package:dart_normalizer/schema/entity.dart';
 import 'package:dart_normalizer/schema/object.dart';
 import 'package:test/test.dart';
 
-import 'array.dart';
-
+import 'array_test.dart';
 
 void main() {
   var expectedJson = """
@@ -31,7 +28,9 @@ void main() {
     var schema = new ObjectSchema({
       "user": userSchema,
     });
-    var test = { "user": { "id": 1}};
+    var test = {
+      "user": {"id": 1}
+    };
     expect(N.normalize(test, schema), fromJson(expectedJson));
   });
 
@@ -39,7 +38,12 @@ void main() {
 
   test("normalizes plain objects as shorthand for ObjectSchema ", () {
     var userSchema = new EntitySchema('user');
-    expect(N.normalize({ "user": { "id": 1}}, { "user": userSchema}),
+    expect(
+        N.normalize({
+          "user": {"id": 1}
+        }, {
+          "user": userSchema
+        }),
         fromJson(expectedJson));
   });
 
@@ -59,8 +63,12 @@ void main() {
   }
 }""";
     var userSchema = new EntitySchema('user');
-    var users = { "foo": userSchema, "bar": userSchema, "baz": userSchema};
-    expect(N.normalize({ "bar": { "id": '1'}}, users), fromJson(expectedJson));
+    var users = {"foo": userSchema, "bar": userSchema, "baz": userSchema};
+    expect(
+        N.normalize({
+          "bar": {"id": '1'}
+        }, users),
+        fromJson(expectedJson));
   });
 
   //========================
@@ -74,15 +82,13 @@ void main() {
   }
 }""";
     var userSchema = new EntitySchema('user');
-    var object = new ObjectSchema({
-      "user": userSchema
-    });
+    var object = new ObjectSchema({"user": userSchema});
     var entities = {
       "user": {
-        1: { "id": 1, "name": 'Nacho'}
+        1: {"id": 1, "name": 'Nacho'}
       }
     };
     expect(
-        N.denormalize({ "user": 1}, object, entities), fromJson(expectedJson));
+        N.denormalize({"user": 1}, object, entities), fromJson(expectedJson));
   });
 }

@@ -1,1 +1,1 @@
-class BaseSchema{}
+class BaseSchema {}

@@ -1,8 +1,5 @@
-import 'package:dart_normalizer/schema/entity.dart';
-import 'package:dart_normalizer/schema/immutable_utils.dart';
 import 'package:dart_normalizer/schema/schema.dart';
 import 'package:dart_normalizer/schema/utils.dart';
-
 
 normalize1(schema, input, parent, key, visit, addEntity) {
   Map<dynamic, dynamic> object = {};
@@ -52,7 +49,6 @@ class ObjectSchema extends BaseSchema {
     }
   }
 
-
   normalize(input, parent, key, visit, addEntity) {
     return normalize1(this.schema, input, parent, key, visit, addEntity);
   }
@@ -60,5 +56,4 @@ class ObjectSchema extends BaseSchema {
   denormalize(input, unvisit) {
     return denormalize1(schema, input, unvisit);
   }
-
 }
