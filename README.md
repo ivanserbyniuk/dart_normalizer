@@ -33,7 +33,7 @@ We have two nested entity types within our `article`: `users` and `comments`. Us
 ```js
 import 'dart:convert';
 import 'package:dart_normalizer/normolizer.dart';
-import 'package:dart_normalizer/schema/entity_test.dart';
+import 'package:dart_normalizer/schema/entity.dart';
 
 // Define a users schema
 final user = new EntitySchema('users');
