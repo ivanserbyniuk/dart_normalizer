@@ -28,14 +28,14 @@ void main() {
         "result": 1
         }
         """;
-    var afterNormalizetion = normalize({ "id": 1}, item);
+    var afterNormalizetion = normalize({"id": 1}, item);
     expect(afterNormalizetion, fromJson(expectedJson));
   });
 
   //=================
 
   test("test custome id attribute string", () {
-    var expectedJson = """ 
+    var expectedJson = """
      {
     "entities":  {
     "users":  {
@@ -49,7 +49,7 @@ void main() {
 }
     """;
     var item = new EntitySchema("users", idAttribute: "id_str");
-    var json = normalize({ "id_str": '134351', "name": 'Kathy'}, item);
+    var json = normalize({"id_str": '134351', "name": 'Kathy'}, item);
     expect(json, fromJson(expectedJson));
   });
 
@@ -80,19 +80,22 @@ void main() {
     }
   }
 }""";
-    var user = new EntitySchema(
-        'users', idAttributeFunc: (entity, parent, key) => key);
-    var inputSchema = new Values(
-        { "users": user}, schemaAttributeFunc: (input, parent, key) => 'users');
+    var user = new EntitySchema('users',
+        idAttributeFunc: (entity, parent, key) => key);
+    var inputSchema = new Values({"users": user},
+        schemaAttributeFunc: (input, parent, key) => 'users');
 
-    var input = { '4': { "name": 'taco'}, '56': { "name": 'burrito'}};
+    var input = {
+      '4': {"name": 'taco'},
+      '56': {"name": 'burrito'}
+    };
     expect(normalize(input, inputSchema), fromJson(expectedJson));
   });
 
 //======================
 
   test('can build the entitys ID from the parent object', () {
-    var expectedJson = """ 
+    var expectedJson = """
     {
     "entities": {
       "users": {
@@ -108,12 +111,14 @@ void main() {
     }
 }""";
     var user = new EntitySchema('users',
-        idAttributeFunc: (entity, parent,
-            key) => "${parent['name']}-${key}-${entity['id']}"
-    );
+        idAttributeFunc: (entity, parent, key) =>
+            "${parent['name']}-${key}-${entity['id']}");
     var inputSchema = new ObjectSchema({"user": user});
 
-    var input = { "name": 'tacos', "user": { "id": '4', "name": 'Jimmy'}};
+    var input = {
+      "name": 'tacos',
+      "user": {"id": '4', "name": 'Jimmy'}
+    };
     expect(normalize(input, inputSchema), fromJson(expectedJson));
   });
 
@@ -140,14 +145,14 @@ void main() {
     };
 
     var mySchema = new EntitySchema('tacos', processStrategy: processStrategy);
-    var input = { "id": 1, "name": 'foo'};
+    var input = {"id": 1, "name": 'foo'};
     expect(normalize(input, mySchema), fromJson(expectedJSON));
   });
 
   //======================
 
   test('can use information from the parent in the process strategy', () {
-    var expectedJson = """ 
+    var expectedJson = """
     {
   "entities": {
     "children": {
@@ -174,18 +179,18 @@ void main() {
       map.addAll({"parentId": parent["id"], "parentKey": key});
       return map;
     };
-    var childEntity = new EntitySchema(
-        'children', processStrategy: processStrategy);
-    var parentEntity = new EntitySchema('parents', definition: {
-      "child": childEntity
-    });
+    var childEntity =
+        new EntitySchema('children', processStrategy: processStrategy);
+    var parentEntity =
+        new EntitySchema('parents', definition: {"child": childEntity});
 
     var input = {
-      "id": 1, "content": 'parent', "child": { "id": 4, "content": 'child'}
+      "id": 1,
+      "content": 'parent',
+      "child": {"id": 4, "content": 'child'}
     };
     expect(normalize(input, parentEntity), fromJson(expectedJson));
   });
-
 
 //===================== merge strategy
 
@@ -209,16 +214,16 @@ void main() {
     """;
     var mySchema = new EntitySchema('tacos');
     var input = [
-      { "id": 1, "name": 'foo'},
-      { "id": 1, "name": 'bar', "alias": 'bar'}
+      {"id": 1, "name": 'foo'},
+      {"id": 1, "name": 'bar', "alias": 'bar'}
     ];
-    expect(normalize(input, [ mySchema]), fromJson(expectedJson));
+    expect(normalize(input, [mySchema]), fromJson(expectedJson));
   });
 
   //===============================
 
   test('can use a custom merging strategy', () {
-    var expectedJson = """ 
+    var expectedJson = """
     {
   "entities": {
     "tacos": {
@@ -240,10 +245,10 @@ void main() {
     var mySchema = new EntitySchema('tacos', mergeStrategy: mergeStrategy);
 
     var input = [
-      { "id": 1, "name": 'foo'},
-      { "id": 1, "name": 'bar', "alias": 'bar'}
+      {"id": 1, "name": 'foo'},
+      {"id": 1, "name": 'bar', "alias": 'bar'}
     ];
-    expect(normalize(input, [ mySchema]), fromJson(expectedJson));
+    expect(normalize(input, [mySchema]), fromJson(expectedJson));
   });
 
   //===================== Denormalization
@@ -256,7 +261,7 @@ void main() {
     var mySchema = new EntitySchema('tacos');
     const entities = {
       "tacos": {
-        1: { "id": 1, "type": 'foo'}
+        1: {"id": 1, "type": 'foo'}
       }
     };
     expect(denormalize(1, mySchema, entities), fromJson(expectedJson));
@@ -276,17 +281,16 @@ void main() {
       "id": 2
     }""";
     var foodSchema = new EntitySchema('foods');
-    var menuSchema = new EntitySchema('menus', definition: {
-      "food": foodSchema
-    });
+    var menuSchema =
+        new EntitySchema('menus', definition: {"food": foodSchema});
 
     const entities = {
       "menus": {
-        1: { "id": 1, "food": 1},
-        2: { "id": 2}
+        1: {"id": 1, "food": 1},
+        2: {"id": 2}
       },
       "foods": {
-        1: { "id": 1}
+        1: {"id": 1}
       }
     };
 
@@ -295,7 +299,6 @@ void main() {
   });
 }
 
-
 toJson(Map value) {
   JsonEncoder encoder = new JsonEncoder.withIndent('');
   String prettyprint = encoder.convert(value);
@@ -303,5 +306,5 @@ toJson(Map value) {
 }
 
 fromJson(String source) {
-  return JSON.decode(source);
+  return json.decode(source);
 }

@@ -1,15 +1,14 @@
-import 'package:dart_normalizer/schema/immutable_utils.dart';
 import 'package:dart_normalizer/schema/schema.dart';
 
 class PolymorphicSchema extends BaseSchema {
   dynamic _schemaAttribute;
   dynamic schema;
 
-  PolymorphicSchema(definition, String schemaAttribute, schemaAttributeFunc(input, parrent, key)) {
-      if (schemaAttributeFunc != null && schemaAttribute == null) {
+  PolymorphicSchema(definition, String schemaAttribute,
+      schemaAttributeFunc(input, parrent, key)) {
+    if (schemaAttributeFunc != null && schemaAttribute == null) {
       this._schemaAttribute = schemaAttributeFunc;
-    }
-    else if (schemaAttributeFunc == null && schemaAttribute != null) {
+    } else if (schemaAttributeFunc == null && schemaAttribute != null) {
       this._schemaAttribute = (input, p1, p2) => input[schemaAttribute];
     } else if (schemaAttribute != null && schemaAttributeFunc != null) {
       throw new Exception("You must use idAttribute or idAttibuteTitle");
@@ -52,11 +51,10 @@ class PolymorphicSchema extends BaseSchema {
     return this.isSingleSchema() || normalizedValue == null
         ? normalizedValue
         : {
-      "id": normalizedValue,
-      "schema": this.getSchemaAttribute(value, parent, key)
-    };
+            "id": normalizedValue,
+            "schema": this.getSchemaAttribute(value, parent, key)
+          };
   }
-
 
   denormalizeValue(value, unvisit) {
     var schemaKey = value is Map ? value["schema"] : null;
@@ -66,8 +64,7 @@ class PolymorphicSchema extends BaseSchema {
     var id;
     if (!(value is Map)) {
       id = value;
-    }
-    else {
+    } else {
       id = value["id"];
     }
     var schema = isSingleSchema() ? this.schema : this.schema[schemaKey];

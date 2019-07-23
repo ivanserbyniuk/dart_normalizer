@@ -2,9 +2,9 @@ import 'package:dart_normalizer/schema/polymorfic.dart';
 
 class Values extends PolymorphicSchema {
   Values(definition,
-      { String schemaAttribute, dynamic schemaAttributeFunc(input, parrent,
-          key)}) : super(definition,  schemaAttribute,
-       schemaAttributeFunc);
+      {String schemaAttribute,
+      dynamic schemaAttributeFunc(input, parrent, key)})
+      : super(definition, schemaAttribute, schemaAttributeFunc);
 
   normalize(Map input, parent, String key, visit, addEntity) {
     Map<dynamic, dynamic> object = {};
@@ -19,8 +19,7 @@ class Values extends PolymorphicSchema {
   }
 
   denormalize(input, unvisit) {
-    return input.map((key, value) =>
-        MapEntry(key, denormalizeValue(value, unvisit)));
+    return input
+        .map((key, value) => MapEntry(key, denormalizeValue(value, unvisit)));
   }
 }
-
